@@ -6,12 +6,12 @@
 
     <groupId>com.dominikbilik.smartgrid</groupId>
     <artifactId>SmartGrid</artifactId>
-    <packaging>pom</packaging>
+    <packaging>pom</packaging> <!-- when the code is packaged, we’re not expecting to see a target JAR/WAR produced for the parent package -->
     <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>measured-data-service</module>
-        <module>parser-service</module>
+        <module>file-service</module>
         <module>data-input-service</module>
         <module>translator-service</module>
         <module>device-service</module>
@@ -21,7 +21,6 @@
         <module>config-server</module>
         <module>discovery-server</module>
     </modules>
-    <!-- when the code is packaged, we’re not expecting to see a target JAR/WAR produced for the parent package -->
 
     <developers>
         <developer>
@@ -40,6 +39,7 @@
         <spring-cloud.version>2021.0.0</spring-cloud.version>
         <spring.boot.maven.plugin.version>2.6.0</spring.boot.maven.plugin.version>
         <spring-cloud-netflix.version>3.1.0</spring-cloud-netflix.version>
+        <guava.version>31.0.1-jre</guava.version>
     </properties>
 
     <dependencyManagement>
