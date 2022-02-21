@@ -4,15 +4,15 @@ import java.util.List;
 
 public class MultiMeasurementRecord extends MeasurementRecord {
 
-    private double[] values;
+    private Double[] values;
 
     private MultiMeasurementRecord () {}
 
-    public double[] getValues() {
+    public Double[] getValues() {
         return values;
     }
 
-    public void setValues(double[] values) {
+    public void setValues(Double[] values) {
         this.values = values;
     }
 
@@ -26,13 +26,8 @@ public class MultiMeasurementRecord extends MeasurementRecord {
             super(obj);
         }
 
-        public T withValues(double[] values) {
+        public T withValues(Double[] values) {
             this.record.setValues(values);
-            return (T) this;
-        }
-
-        public T withValues(List<Double> values) {
-            this.record.setValues(values.stream().mapToDouble(d -> d).toArray());
             return (T) this;
         }
 

@@ -44,7 +44,7 @@ public class FileParserServiceImpl implements FileParserService {
 
         // use checker
         measurementChecker.checkAndFillMultiValuesMeasurement(measurement);
-        
+
         return measurement;
     }
 

@@ -77,7 +77,7 @@ public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasureme
         // parse value lines; realOrder - in case we have the wrong line, we want to deduct the correct number from the time reference value
         for (int i = bodyHeaderIndex + 1, realOrder = 0; i < bodyLines.size(); i++) {
             try {
-                double[] values = parseValueBodyLine(bodyLines.get(i));
+                Double[] values = parseValueBodyLine(bodyLines.get(i));
                 if (values == null || values.length != measurement.getMeasurementsCount()) {
                     continue;
                 }
@@ -94,10 +94,10 @@ public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasureme
 
     }
 
-    private double[] parseValueBodyLine(String line) {
+    private Double[] parseValueBodyLine(String line) {
         return Arrays.stream(line.substring(1, line.length() - 1).split("\\)\\("))
-                .mapToDouble(Double::parseDouble)
-                .toArray();
+                .map(Double::valueOf)
+                .toArray(Double[]::new);
     }
 
     /**

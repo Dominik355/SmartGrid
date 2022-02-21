@@ -4,8 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Spliterator;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 public class ParserUtils {
 
@@ -131,6 +135,13 @@ public class ParserUtils {
 
         public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");
         public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
+
+        public static final int MINIMAL_FILE_SIZE = 4; // 2 lines in header, 1 separator and 1 values
+
+        public static boolean isSeparatingLine(String line) {
+            return line.strip().codePoints().mapToObj(c -> (char) c).equals('-');
+        }
+
     }
 
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yy");
