@@ -6,7 +6,7 @@ import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.Measurement
 import com.dominikbilik.smartgrid.fileService.dto.records.MeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
@@ -27,7 +27,7 @@ public abstract class AbstractAblParser<R extends MeasurementRecord, M extends M
      * @return - tuple of <Header, Body>
      */
     protected Tuple2<List<String>, List<String>> stripAndSplit() {
-        lines.removeIf(Strings::isNullOrEmpty);
+        lines.removeIf(StringUtils::isEmpty);
 
         if (!isHeaderTagLine(lines.get(0))) {
             throw new SmartGridParsingException("AbstractAblParser: First line of file is not a specified header tag [" + HEADER_TAG + "]");

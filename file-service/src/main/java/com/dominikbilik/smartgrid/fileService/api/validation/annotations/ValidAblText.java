@@ -1,7 +1,7 @@
-package com.dominikbilik.smartgrid.fileService.validation.annotations;
+package com.dominikbilik.smartgrid.fileService.api.validation.annotations;
 
 import com.dominikbilik.smartgrid.fileService.utils.ParserUtils;
-import com.dominikbilik.smartgrid.fileService.validation.AblTextValidator;
+import com.dominikbilik.smartgrid.fileService.api.validation.impl.AblTextValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

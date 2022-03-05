@@ -2,6 +2,8 @@ package com.dominikbilik.smartgrid.fileService.dto.records;
 
 public class MultiMeasurementRecord extends MeasurementRecord {
 
+    static final long serialVersionUID = 444L;
+
     private Double[] values;
 
     private MultiMeasurementRecord () {}

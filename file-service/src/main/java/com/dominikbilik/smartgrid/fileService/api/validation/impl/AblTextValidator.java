@@ -1,6 +1,6 @@
-package com.dominikbilik.smartgrid.fileService.validation;
+package com.dominikbilik.smartgrid.fileService.api.validation.impl;
 
-import com.dominikbilik.smartgrid.fileService.validation.annotations.ValidAblText;
+import com.dominikbilik.smartgrid.fileService.api.validation.annotations.ValidAblText;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

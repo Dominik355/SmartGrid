@@ -5,7 +5,7 @@ import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.ParserUtils;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
@@ -93,7 +93,7 @@ public class MeteoParser extends MeasurementParser<MultiValuesMeasurement> {
     }
 
     protected Tuple2<List<String>, List<String>> stripAndSplit() {
-        lines.removeIf(Strings::isNullOrEmpty);
+        lines.removeIf(StringUtils::isEmpty);
         // first - find line separating header and body - it should be third line
         if (!ParserUtils.MeteoUtils.isSeparatingLine(lines.get(2))) {
             throw new SmartGridParsingException("Your heading should consist of 2 lines... no more, no less");

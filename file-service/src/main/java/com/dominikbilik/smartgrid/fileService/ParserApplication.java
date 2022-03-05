@@ -12,10 +12,4 @@ public class ParserApplication {
         SpringApplication.run(ParserApplication.class, args);
     }
 
-
-    @PostConstruct
-    public void nanana() {
-
-    }
-
 }

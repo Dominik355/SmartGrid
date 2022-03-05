@@ -1,8 +1,9 @@
 package com.dominikbilik.smartgrid.fileService.dto.records;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class Record {
+public abstract class Record implements Serializable {
 
     private LocalDateTime dateTime;
     protected Record() {}

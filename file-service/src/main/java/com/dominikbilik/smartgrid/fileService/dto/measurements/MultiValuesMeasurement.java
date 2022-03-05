@@ -9,6 +9,8 @@ import java.util.List;
 
 public class MultiValuesMeasurement<T extends MultiMeasurementRecord> extends Measurement {
 
+    static final long serialVersionUID = 111L;
+
     private String[] quantityNames;
     private String[] quantityUnits;
     private List<T> records;

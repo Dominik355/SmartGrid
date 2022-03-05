@@ -3,6 +3,7 @@ package com.dominikbilik.smartgrid.fileService.dto.measurements;
 import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
 import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.DATE_FORMAT;
 import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.TIME_FORMAT;
 
-public class Measurement {
+public class Measurement implements Serializable {
 
     private String deviceId;
     private String deviceName;

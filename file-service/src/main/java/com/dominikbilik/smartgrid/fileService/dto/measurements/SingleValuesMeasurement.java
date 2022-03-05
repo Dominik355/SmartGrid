@@ -10,6 +10,8 @@ import java.util.List;
 
 public class SingleValuesMeasurement<T extends SingleMeasurementRecord> extends Measurement {
 
+    static final long serialVersionUID = 222L;
+
     private List<T> records;
     private List<ObisInfoRecord> infoRecords;
 

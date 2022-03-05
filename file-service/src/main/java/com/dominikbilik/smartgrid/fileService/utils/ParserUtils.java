@@ -1,11 +1,13 @@
 package com.dominikbilik.smartgrid.fileService.utils;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import org.apache.tomcat.util.buf.CharsetUtil;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ParserUtils {
 
@@ -31,13 +33,13 @@ public class ParserUtils {
             return line != null && line.strip().equals(OBIS_ENDING_TAG);
         }
 
-        public static final ImmutableList<String> HEADERS = ImmutableList.<String>builder()
-                .add("PROT")
-                .add("MAN1")
-                .add("ZNR1")
-                .add("DATE")
-                .add("TIME")
-                .build();
+        public static final List<String> HEADERS = ListUtils.unmodifiableList(new ArrayList<>(){{
+                add("PROT");
+                add("MAN1");
+                add("ZNR1");
+                add("DATE");
+                add("TIME");
+        }});
 
         public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");
         public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -110,24 +112,24 @@ public class ParserUtils {
                 "Wind Samp", "Wind TX", "ISS Recept", "Arc. Int."
         };
 
-        public static final ImmutableMap<String, Double> WIND_DIRECTIONS = ImmutableMap.<String, Double>builder()
-                .put("N",0d)
-                .put("NNe",22.5d)
-                .put("NE",45d)
-                .put("ENE",67.5d)
-                .put("E",90d)
-                .put("ESE",112.5d)
-                .put("SE",135d)
-                .put("SSE",157.5d)
-                .put("S",180d)
-                .put("SSW",202.5d)
-                .put("SW",225d)
-                .put("WSW",247.5d)
-                .put("W",270d)
-                .put("WNW",292.5d)
-                .put("NW",315d)
-                .put("NNW",337.5d)
-                .build();
+        public static final Map<String, Double> WIND_DIRECTIONS = MapUtils.unmodifiableMap(new HashMap<>(){{
+                    put("N",0d);
+                    put("NNe",22.5d);
+                    put("NE",45d);
+                    put("ENE",67.5d);
+                    put("E",90d);
+                    put("ESE",112.5d);
+                    put("SE",135d);
+                    put("SSE",157.5d);
+                    put("S",180d);
+                    put("SSW",202.5d);
+                    put("SW",225d);
+                    put("WSW",247.5d);
+                    put("W",270d);
+                    put("WNW",292.5d);
+                    put("NW",315d);
+                    put("NNW",337.5d);
+        }});
 
         public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");
         public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");

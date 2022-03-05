@@ -2,6 +2,8 @@ package com.dominikbilik.smartgrid.fileService.dto.records;
 
 public class ObisSingleMeasurementRecord extends SingleMeasurementRecord {
 
+    static final long serialVersionUID = 333L;
+
     private int medium;
     private int channel;
     private int measurementVariable;
