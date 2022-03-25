@@ -4,3 +4,25 @@ server:
 spring:
   application:
     name: measured-data-service
+  sql:
+    init:
+      data-locations: classpath:sql/*.sql # or create DataSourceInitializer Bean
+      mode: always
+
+app:
+  datasource:
+    main:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://localhost:5432/measured_data_service_db
+      username: dominik
+      password: dominik
+      maxPoolSize: 30
+
+
+logging:
+  level:
+    org:
+      springframework:
+        data: DEBUG
+        jdbc:
+          core: TRACE

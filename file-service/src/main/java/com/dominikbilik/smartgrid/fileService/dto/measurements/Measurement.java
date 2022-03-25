@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,17 +18,18 @@ public class Measurement implements Serializable {
 
     private String deviceId;
     private String deviceName;
+    private String deviceDataset;
 
-    private Map<String, String> headers;//
+    private Map<String, String> headers;
 
-    private String sourceFileName;//
+    private String sourceFileName;
 
     private MeasurementType measurementType;//
     private MeasurementTypeByTime measurementTypeByTime;
 
-    private LocalDateTime from;//
+    private LocalDateTime from;
 
-    private LocalDateTime to;//
+    private LocalDateTime to;
 
     protected Measurement(MeasurementType measurementType, MeasurementTypeByTime measurementTypeByTime) {
         this.measurementType = measurementType;
@@ -53,6 +53,14 @@ public class Measurement implements Serializable {
 
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public String getDeviceDataset() {
+        return deviceDataset;
+    }
+
+    public void setDeviceDataset(String deviceDataset) {
+        this.deviceDataset = deviceDataset;
     }
 
     public Map<String, String> getHeaders() {

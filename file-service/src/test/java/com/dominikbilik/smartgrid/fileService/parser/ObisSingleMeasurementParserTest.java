@@ -51,14 +51,14 @@ public class ObisSingleMeasurementParserTest {
         assertThat(measurement.getFrom()).isNotNull();
         assertThat(measurement.getTo()).isNotNull();
         assertThat(measurement.getDeviceId()).isNotNull();
-        assertThat(measurement.getDeviceName()).isNotNull();
+        assertThat(measurement.getDeviceDataset()).isNotNull();
         assertThat(measurement.getHeaders()).isNotNull();
         assertThat(measurement.getRecords()).isNotNull();
         assertThat(measurement.getInfoRecords()).isNotNull();
         assertThat(measurement.getSourceFileName()).isNotNull();
 
         assertThat(measurement.getFrom().isEqual(measurement.getTo()));
-        assertThat(measurement.getDeviceName()).isEqualTo("DR");
+        assertThat(measurement.getDeviceDataset()).isEqualTo("DR");
         assertThat(measurement.getInfoRecords().size()).isGreaterThan(1);
         assertThat(measurement.getRecords().size()).isGreaterThan(1);
         assertThat(measurement.getRecords().get(0).getUnit()).isNotNull();

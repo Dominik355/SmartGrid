@@ -30,8 +30,18 @@ public class ParserController {
             @RequestPart(name = "file") MultipartFile file,
             @RequestPart(name = "parseFileRequest") ParseFileRequest request) {
         Assert.notNull(file.getSize(), "File can not be empty");
-        LOG.info("ParserController.parseMeasurementFile [measurementType={}, fileName={}]", request.getMeasuremetType(), request.getFullFileName());
+        LOG.info("ParserController.parseMeasurementFile(). parseMeasurementFile = [measurementType={}, fileName={}], {}", request.getMeasuremetType(), request.getFullFileName(), getFileInfo(file));
         return ResponseEntity.ok(fileParserService.parseFile(file, request.getFullFileName(), request.getMeasuremetType()));
+    }
+
+    private String getFileInfo(MultipartFile file) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("multipartFile = [");
+        builder.append("fileName: " + file.getOriginalFilename());
+        builder.append(", fileSize: " + file.getSize());
+        builder.append(", content-type: " + file.getContentType());
+        builder.append("]");
+        return builder.toString();
     }
 
 }

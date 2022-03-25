@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: dominik
+      POSTGRES_PASSWORD: dominik
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dominik@mail.com
+      PGADMIN_DEFAULT_PASSWORD: dominik
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "5050:80"
+    networks:
+      - database
+    restart: unless-stopped
+
+networks:
+  database:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

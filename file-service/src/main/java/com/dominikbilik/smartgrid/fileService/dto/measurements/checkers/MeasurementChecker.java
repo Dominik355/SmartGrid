@@ -39,8 +39,8 @@ public class MeasurementChecker {
         if (measurement.getDeviceId() == null && measurement.getHeaders().get("ID") != null) {
             measurement.setDeviceId(measurement.getHeaders().get("ID"));
         }
-        if (measurement.getDeviceName() == null && measurement.getHeaders().get("NAME") != null) {
-            measurement.setDeviceName(measurement.getHeaders().get("NAME"));
+        if (measurement.getDeviceDataset() == null && measurement.getHeaders().get("DATASET") != null) {
+            measurement.setDeviceDataset(measurement.getHeaders().get("DATASET"));
         }
         if (measurement.getTo() == null) {
             measurement.setTo(measurement.getDateTimeFromHeader()

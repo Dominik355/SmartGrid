@@ -13,6 +13,7 @@ import com.dominikbilik.smartgrid.fileService.parser.ObisSingleMeasurementParser
 import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.utils.FileUtils;
 import com.dominikbilik.smartgrid.fileService.utils.common.SupplierFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,31 +38,13 @@ public class FileParserServiceImpl implements FileParserService {
     private SupplierFactory<MeteoParser> meteoParser = new SupplierFactory<>(() -> new MeteoParser());
 
     @Override
-    public MultiValuesMeasurement<MultiMeasurementRecord> parseMultiMeasurementFile(List<String> file, String fileName, String fileType) {
-        Assert.noNullElements(file, "File list can not be null nor empty");
-        Assert.notNull(fileName, "Filename can not be null");
-        // parse based on fileType
-        MultiValuesMeasurement<MultiMeasurementRecord> measurement = null;
-        if (fileType.equalsIgnoreCase(CLASSIC_OBIS.toString())) {
-            measurement = obisMultiParser.get().parseToMeasurement(file, fileName);
-        } else if (fileType.equalsIgnoreCase(METEO.toString())) {
-            measurement = meteoParser.get().parseToMeasurement(file, fileName);
-        } else {
-            throw new SmartGridParsingException("Not supported fileType for multi measurement file");
-        }
-
-        // use checker
-        checkAndFillMultiValuesMeasurement(measurement);
-
-        return measurement;
-    }
-
-    @Override
     public Measurement parseFile(MultipartFile file, String fileName, String fileType) {
+        LOG.info("Parsing service method parseFile() called for : filename={}, filetype={}", (fileName != null ? fileName : file.getOriginalFilename()), fileType);
         if (fileName != null && !file.getOriginalFilename().equals(fileName)) {
             throw new IllegalArgumentException("Provided filename [{" + fileName + "}] does not match name of provided file [{" + file.getOriginalFilename() + "}]");
-        } else if (fileName == null) {
-            fileName = file.getName();
+        } else if (StringUtils.isEmpty(fileName)) {
+            LOG.info("Filename wasnt provided in request object, so we use filename from multipartfile");
+            fileName = file.getOriginalFilename();
         }
 
         List<String> fileLines;
@@ -82,6 +65,26 @@ public class FileParserServiceImpl implements FileParserService {
             default:
                 throw new IllegalStateException("Unexpected value for filetype: " + fileType);
         }
+    }
+
+    @Override
+    public MultiValuesMeasurement<MultiMeasurementRecord> parseMultiMeasurementFile(List<String> file, String fileName, String fileType) {
+        Assert.noNullElements(file, "File list can not be null nor empty");
+        Assert.notNull(fileName, "Filename can not be null");
+        // parse based on fileType
+        MultiValuesMeasurement<MultiMeasurementRecord> measurement = null;
+        if (fileType.equalsIgnoreCase(CLASSIC_OBIS.toString())) {
+            measurement = obisMultiParser.get().parseToMeasurement(file, fileName);
+        } else if (fileType.equalsIgnoreCase(METEO.toString())) {
+            measurement = meteoParser.get().parseToMeasurement(file, fileName);
+        } else {
+            throw new SmartGridParsingException("Not supported fileType for multi measurement file");
+        }
+
+        // use checker
+        checkAndFillMultiValuesMeasurement(measurement);
+
+        return measurement;
     }
 
     @Override

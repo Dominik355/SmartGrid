@@ -67,7 +67,7 @@ public class ObisMultiMeasurementParserTest {
         assertThat(measurement.getFrom()).isNotNull();
         assertThat(measurement.getTo()).isNotNull();
         assertThat(measurement.getDeviceId()).isNotNull();
-        assertThat(measurement.getDeviceName()).isNotNull();
+        assertThat(measurement.getDeviceDataset()).isNotNull();
         assertThat(measurement.getHeaders()).isNotNull();
         assertThat(measurement.getRecords()).isNotNull();
         assertThat(measurement.getSourceFileName()).isNotNull();

@@ -90,7 +90,7 @@ public class ParserUtils {
         public static final String OBIS_PATTERN = "^(\\d{0,3})-?(\\d{0,3}):?([0-9CFP]{1,3}).([0-9CFP]{1,3}).?(\\d{0,3})([*&](\\d{0,3}))?(\\((\\d*\\.?\\d*)\\*([a-zA-Z]+)\\))?\\s*(\\(([0-9]+)\\))?$";
 
         public static final String FILENAME_SEPARATOR = "_";
-        public static final String FILENAME_PATTERN = "ID_NAME_DATETIME";
+        public static final String FILENAME_PATTERN = "ID_DATASET_DATETIME";
         public static final DateTimeFormatter FILENAME_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyMMddHHmm");
 
     }

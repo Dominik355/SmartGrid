@@ -58,7 +58,7 @@ public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasureme
     protected void parseBody(List<String> bodyLines) {
         // first we need to find header of body telling us about columns
         Integer bodyHeaderIndex = null;
-        String tag = resolveNameToTag(parsedFilename.get("NAME"));
+        String tag = resolveNameToTag(parsedFilename.get("DATASET"));
         for (int i = 0; i < bodyLines.size(); i++) {
             String line = bodyLines.get(i);
             if (line.contains(tag)) {
