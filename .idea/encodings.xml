@@ -17,8 +17,8 @@
     <file url="file://$PROJECT_DIR$/gateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/location-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/location-service/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/measured-data-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/measured-data-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/measurement-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/measurement-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/translator-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/translator-service/src/main/resources" charset="UTF-8" />
   </component>

@@ -7,7 +7,7 @@ public class MeasurementMapper {
 
     public static Measurement dtoToEntity(MeasurementDto dto) {
         Measurement entity = new Measurement();
-
+/*
         entity.setReferenceDeviceId();
         entity.setDeviceId();
         entity.setDataSet();
@@ -30,7 +30,7 @@ public class MeasurementMapper {
         dto.getMeasurementTypeByTime();
         dto.getFrom();
         dto.getTo();
-
+*/
         return entity;
     }
 }

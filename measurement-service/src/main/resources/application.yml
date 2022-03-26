@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: measured-data-service
+    name: measurement-service
   sql:
     init:
       data-locations: classpath:sql/*.sql # or create DataSourceInitializer Bean

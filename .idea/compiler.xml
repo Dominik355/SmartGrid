@@ -10,8 +10,8 @@
         <module name="config-server" />
         <module name="auth-service" />
         <module name="discovery-server" />
-        <module name="measured-data-service" />
         <module name="location-service" />
+        <module name="measurement-service" />
         <module name="device-service" />
         <module name="translator-service" />
         <module name="file-service" />
