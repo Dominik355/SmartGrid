@@ -58,7 +58,7 @@ public class MeteoParserTest {
         assertThat(measurement.getTo()).isNotNull();
         // assertThat(measurement.getDeviceId()).isNotNull(); meteo doesnt provide device ID or name in filename or file header
         // assertThat(measurement.getDeviceName()).isNotNull();
-        // assertThat(measurement.getHeaders()).isNotNull(); meteo does not ocntain file header
+        // assertThat(measurement.getHeaders()).isNotNull(); meteo does not contain file header
         assertThat(measurement.getRecords()).isNotNull();
         assertThat(measurement.getSourceFileName()).isNotNull();
         assertThat(measurement.getMeasurementsCount()).isNotNull().isNotNegative();

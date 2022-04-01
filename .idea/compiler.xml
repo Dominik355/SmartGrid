@@ -10,6 +10,7 @@
         <module name="config-server" />
         <module name="auth-service" />
         <module name="discovery-server" />
+        <module name="measurement-service-api" />
         <module name="location-service" />
         <module name="measurement-service" />
         <module name="device-service" />
@@ -20,6 +21,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="config-discovery-server" target="11" />
+      <module name="measurement-service-client" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
