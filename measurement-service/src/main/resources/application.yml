@@ -13,7 +13,7 @@ app:
   datasource:
     main:
       driver-class-name: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/measured_data_service_db
+      jdbc-url: jdbc:postgresql://localhost:5432/measurement_service_db
       username: dominik
       password: dominik
       maxPoolSize: 30

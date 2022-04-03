@@ -1,6 +1,6 @@
 package com.dominikbilik.smartgrid.measureddata.service.mappers;
 
-import com.dominikbilik.smartgrid.measureddata.api.dto.measurements.MeasurementDto;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.domain.entity.Measurement;
 
 public class MeasurementMapper {

@@ -1,7 +1,6 @@
 package com.dominikbilik.smartgrid.measureddata.service;
 
-import com.dominikbilik.smartgrid.measureddata.api.dto.measurements.MeasurementDto;
-import com.dominikbilik.smartgrid.measureddata.domain.entity.Record;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.measurements.MeasurementDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

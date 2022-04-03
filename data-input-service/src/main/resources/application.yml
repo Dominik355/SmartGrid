@@ -14,6 +14,6 @@ spring:
 
   kafka:
     bootstrap:
-      server: pkc-4ygn6.europe-west3.gcp.confluent.cloud:9092
+      server: localhost:29092
     client:
       timeout: 30000

@@ -1,10 +1,14 @@
 package com.dominikbilik.smartgrid.datainput.saga.objects;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
 public class SagaInstance {
 
+    @Id
     private Long id;
     private String sagaType;
     private LocalDateTime creationTime;
@@ -12,7 +16,5 @@ public class SagaInstance {
     private LocalDateTime errorTime;
     private String endState;
     private Boolean completed;
-
-
 
 }

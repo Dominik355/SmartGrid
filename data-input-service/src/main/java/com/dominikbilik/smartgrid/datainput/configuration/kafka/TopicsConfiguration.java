@@ -3,6 +3,7 @@ package com.dominikbilik.smartgrid.datainput.configuration.kafka;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 import static org.apache.kafka.common.config.TopicConfig.*;
 
 @Configuration
+@DependsOn("kafkaConfiguration")
 public class TopicsConfiguration {
 
     public static final String DLT_SUFFIX = ".DLT";
@@ -24,22 +26,22 @@ public class TopicsConfiguration {
 
     @Bean
     public NewTopic processFileTopic() {
-        return new NewTopic("process_file_command", 1, (short) 1).configs(commonProperties);
+        return new NewTopic("process_file", 1, (short) 1).configs(commonProperties);
     }
 
     @Bean
     public NewTopic processFileTopicDLT() {
-        return new NewTopic("process_file_command" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
+        return new NewTopic("process_file" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
     }
 
     @Bean
     public NewTopic processFileReplyTopic() {
-        return new NewTopic("process_file_command_reply", 1, (short) 1).configs(commonProperties);
+        return new NewTopic("process_file_reply", 1, (short) 1).configs(commonProperties);
     }
 
     @Bean
     public NewTopic processFileReplyTopicDLT() {
-        return new NewTopic("process_file_command_reply" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
+        return new NewTopic("process_file_reply" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
     }
 
 }

@@ -30,7 +30,7 @@ import static org.apache.kafka.clients.CommonClientConfigs.REQUEST_TIMEOUT_MS_CO
 public class KafkaConfiguration {
 
     protected static String BOOTSTRAP_SERVER;
-    protected static Long CLIENT_TIMEOUT;
+    protected static Integer CLIENT_TIMEOUT;
 
     /*
         Use TYPE_MAPPINGS to map objects with different names , e.g.:"foo:test.common.Foo2,bar:test.common.Bar2"
@@ -57,7 +57,7 @@ public class KafkaConfiguration {
     }
 
     @Value("${spring.kafka.client.timeout}")
-    public void setClientTimeout(Long clientTimeout) {
+    public void setClientTimeout(Integer clientTimeout) {
         CLIENT_TIMEOUT = clientTimeout;
     }
 

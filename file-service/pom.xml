@@ -73,6 +73,12 @@
             <artifactId>commons-collections4</artifactId>
             <version>${apache.commons.collections4}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.dominikbilik.smartgrid</groupId>
+            <artifactId>file-service-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

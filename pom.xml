@@ -11,16 +11,19 @@
 
     <modules>
         <module>measurement-service</module>
+        <module>measurement-service-api</module>
         <module>file-service</module>
+        <module>file-service-api</module>
         <module>data-input-service</module>
         <module>translator-service</module>
         <module>device-service</module>
+        <module>device-service-api</module>
         <module>location-service</module>
         <module>auth-service</module>
         <module>gateway</module>
         <module>config-server</module>
         <module>discovery-server</module>
-        <module>measurement-service-api</module>
+        <module>smartgrid-common</module>
     </modules>
 
     <developers>
