@@ -3,7 +3,7 @@ package com.dominikbilik.smartgrid.datainput.saga.sagas.newMeasurement;
 import java.util.function.Supplier;
 
 public enum NewMeasurementState implements SagaState<NewMeasurementState> {
-    ERROR_OCCURED(() -> null),
+
     COMPLETED(() -> null),
     MEASUREMENT_PROCESSED(() -> NewMeasurementState.COMPLETED),
     DEVICE_VERIFIED(() -> NewMeasurementState.MEASUREMENT_PROCESSED),
@@ -34,6 +34,11 @@ public enum NewMeasurementState implements SagaState<NewMeasurementState> {
     @Override
     public NewMeasurementState endingState() {
         return NewMeasurementState.COMPLETED;
+    }
+
+    @Override
+    public String getName() {
+        return this.name();
     }
 
 }

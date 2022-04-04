@@ -1,4 +1,4 @@
-package com.dominikbilik.smartgrid.fileService.configuration.kafka;
+package com.dominikbilik.smartgrid.measureddata.configuration.kafka;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

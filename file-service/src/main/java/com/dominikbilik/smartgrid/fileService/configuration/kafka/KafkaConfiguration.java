@@ -25,7 +25,8 @@ public class KafkaConfiguration {
     /*
         Use TYPE_MAPPINGS to map objects with different names , e.g.:"foo:test.common.Foo2,bar:test.common.Bar2"
      */
-    protected static final String TYPE_MAPPINGS = "";
+    protected static final String TYPE_MAPPINGS = "processFileCommand:com.dominikbilik.smartgrid.fileService.api.v1.events.ProcessFileCommand," +
+            "processFileCommandResponse:com.dominikbilik.smartgrid.fileService.api.v1.events.ProcessFileCommandResponse";
 
     /*
         set correlation ID based on message key. Basic use of UUID is better in performance view, but i want to have readable

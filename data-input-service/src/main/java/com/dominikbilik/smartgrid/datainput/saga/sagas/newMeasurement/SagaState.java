@@ -6,5 +6,10 @@ public interface SagaState<T extends SagaState> {
     public T state();
     public T initialState();
     public T endingState();
+    public String getName();
+
+    public default String getErrorState() {
+        return "ERROR_OCCURED";
+    }
 
 }

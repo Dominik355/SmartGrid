@@ -1,22 +1,21 @@
 package com.dominikbilik.smartgrid.datainput.saga;
 
-import com.dominikbilik.smartgrid.datainput.saga.objects.SagaStep;
 import com.dominikbilik.smartgrid.datainput.saga.sagas.newMeasurement.SagaState;
 
 import java.util.List;
 
 public abstract class Saga {
 
-    protected SagaState state;
+    public abstract String getSagaName();
 
     public abstract List<SagaStep> getSteps();
 
-    public SagaState getState() {
-        return state;
-    }
+    public abstract Object getData();
 
-    public void updateState(SagaState state) {
-        this.state = state;
-    }
+    public abstract String getSagaSystemId();
+
+    public abstract SagaState executeAction(int stepNum);
+
+    public abstract boolean executeCompensation(int stepNum);
 
 }

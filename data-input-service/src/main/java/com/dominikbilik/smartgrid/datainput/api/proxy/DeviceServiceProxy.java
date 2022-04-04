@@ -1,4 +1,4 @@
-package com.dominikbilik.smartgrid.datainput.saga.impl;
+package com.dominikbilik.smartgrid.datainput.api.proxy;
 
 import com.dominikbilik.smartgrid.datainput.saga.MessageSupplier;
 import com.dominikbilik.smartgrid.device.api.v1.events.VerifyDeviceCommand;
@@ -52,7 +52,7 @@ public class DeviceServiceProxy extends Proxy {
         Assert.notNull(command, "Command can not be null");
         Assert.notNull(command.getMessage(), "message can not be null");
         Assert.notNull(command.getKey(), "Key can not be null");
-        LOG.debug("verifyDevice: Sending VerifyDeviceCommand to a topic {} with a key {}. Timeout set to {} seconds", VERIFY_DEVICE_TOPIC, command.getKey(), RESPONSE_TIMEOUT_SECONDS);
+        LOG.info("verifyDevice: Sending VerifyDeviceCommand to a topic {} with a key {}. Timeout set to {} seconds", VERIFY_DEVICE_TOPIC, command.getKey(), RESPONSE_TIMEOUT_SECONDS);
         if (command.getMessage().getTopic() != null && !VERIFY_DEVICE_TOPIC.equals(command.getMessage().getTopic())) {
             throw new RuntimeException("Topic name of the message [" + command.getMessage().getTopic() + "] does not match topic name of this Producer [" + VERIFY_DEVICE_TOPIC + "]");
         }

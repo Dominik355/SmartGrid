@@ -1,8 +1,6 @@
-package com.dominikbilik.smartgrid.datainput.configuration.kafka;
+package com.dominikbilik.smartgrid.measureddata.configuration.kafka;
 
 import org.apache.kafka.common.TopicPartition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -22,18 +20,16 @@ import org.springframework.util.backoff.FixedBackOff;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dominikbilik.smartgrid.datainput.configuration.kafka.TopicsConfiguration.DLT_SUFFIX;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
 
 @Configuration
-@DependsOn({"kafkaConfiguration", "producerKafkaConfiguration","topicsConfiguration"})
+@DependsOn({"kafkaConfiguration", "producerKafkaConfiguration"})
 public class ConsumerKafkaConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConsumerKafkaConfiguration.class);
-
     private static final String RETRY_ATTEMPT_HEADER = "retry_attempt";
+
     private static final int RETRY_MAX_ATTEMPTS = 5;
 
     public static Map<String, Object> consumerConfigs() {
@@ -47,8 +43,8 @@ public class ConsumerKafkaConfiguration {
 
         properties.put(KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         properties.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
-        properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class);
+        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
+        properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
 
         properties.put(JsonDeserializer.TYPE_MAPPINGS, KafkaConfiguration.TYPE_MAPPINGS);
         properties.put("spring.json.trusted.packages", "*");
@@ -67,12 +63,13 @@ public class ConsumerKafkaConfiguration {
     }
 
     @Bean("kafkaListenerContainerFactoryStringObject")
-    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory(KafkaTemplate<String, Object> kafkaTemplate) {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setAutoStartup(true);
         factory.setBatchListener(false); // dont want to implement bulk message processing
         factory.setCommonErrorHandler(commonErrorHandler()); // handling errors by sending messages to Dead Letter Topic and logging exception
+        factory.setReplyTemplate(kafkaTemplate);
         return factory;
     }
 
@@ -95,9 +92,9 @@ public class ConsumerKafkaConfiguration {
         return new DeadLetterPublishingRecoverer(
                 createDltKafkaTemplate(),
                 (record, exception) -> {
-                    LOG.error("Exception occured while processing kafka message. Sending message to {}", record.topic() + DLT_SUFFIX);
+                    System.out.println("ERROR HAS OCCURED for object: " + record.value() + ", with key: " + record.key() + "\n" + exception);
                     exception.printStackTrace();
-                    return new TopicPartition(record.topic() + DLT_SUFFIX, record.partition());
+                    return new TopicPartition(record.topic() + ".DLT", record.partition());
                 });
     }
 

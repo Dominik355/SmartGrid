@@ -1,7 +1,6 @@
 package com.dominikbilik.smartgrid.fileService.configuration.kafka;
 
 import org.apache.kafka.common.TopicPartition;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -44,8 +43,8 @@ public class ConsumerKafkaConfiguration {
 
         properties.put(KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         properties.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, StringDeserializer.class);
-        properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class);
+        properties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
+        properties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
 
         properties.put(JsonDeserializer.TYPE_MAPPINGS, KafkaConfiguration.TYPE_MAPPINGS);
         properties.put("spring.json.trusted.packages", "*");
@@ -92,7 +91,11 @@ public class ConsumerKafkaConfiguration {
     public DeadLetterPublishingRecoverer dltRecoverer() {
         return new DeadLetterPublishingRecoverer(
                 createDltKafkaTemplate(),
-                (record, exception) -> new TopicPartition(record.topic() + ".DLT", record.partition()));
+                (record, exception) -> {
+                    System.out.println("ERROR HAS OCCURED for object: " + record.value() + ", with key: " + record.key() + "\n" + exception);
+                    exception.printStackTrace();
+                    return new TopicPartition(record.topic() + ".DLT", record.partition());
+                });
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.dominikbilik.smartgrid.datainput.saga.impl;
+package com.dominikbilik.smartgrid.datainput.api.proxy;
 
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ProducerFactory;

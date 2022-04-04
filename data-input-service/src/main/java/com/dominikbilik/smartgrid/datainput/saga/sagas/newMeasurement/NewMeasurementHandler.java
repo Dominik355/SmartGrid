@@ -1,9 +1,9 @@
 package com.dominikbilik.smartgrid.datainput.saga.sagas.newMeasurement;
 
 import com.dominikbilik.smartgrid.datainput.saga.MessageSupplier;
-import com.dominikbilik.smartgrid.datainput.saga.impl.DeviceServiceProxy;
-import com.dominikbilik.smartgrid.datainput.saga.impl.FileServiceProxy;
-import com.dominikbilik.smartgrid.datainput.saga.impl.MeasurementServiceProxy;
+import com.dominikbilik.smartgrid.datainput.api.proxy.DeviceServiceProxy;
+import com.dominikbilik.smartgrid.datainput.api.proxy.FileServiceProxy;
+import com.dominikbilik.smartgrid.datainput.api.proxy.MeasurementServiceProxy;
 import com.dominikbilik.smartgrid.device.api.v1.events.VerifyDeviceCommand;
 import com.dominikbilik.smartgrid.device.api.v1.events.VerifyDeviceCommandResponse;
 import com.dominikbilik.smartgrid.fileService.api.v1.events.ProcessFileCommand;

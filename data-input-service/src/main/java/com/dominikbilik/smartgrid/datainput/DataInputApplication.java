@@ -17,7 +17,7 @@ public class DataInputApplication {
 
     @Autowired
     private NewMeasurementHandler handler;
-
+/*
     @Bean
     public CommandLineRunner runner() {
         return args -> {
@@ -25,5 +25,5 @@ public class DataInputApplication {
             saga.start();
         };
     }
-
+*/
 }

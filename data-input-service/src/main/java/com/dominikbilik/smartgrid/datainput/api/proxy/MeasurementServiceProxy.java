@@ -1,8 +1,7 @@
-package com.dominikbilik.smartgrid.datainput.saga.impl;
+package com.dominikbilik.smartgrid.datainput.api.proxy;
 
 import com.dominikbilik.smartgrid.datainput.saga.MessageSupplier;
 import com.dominikbilik.smartgrid.measureddata.api.v1.events.ProcessMeasurementCommand;
-import com.dominikbilik.smartgrid.measureddata.api.v1.events.ReverseProcessMeasurementCommand;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +11,8 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
@@ -55,13 +52,13 @@ public class MeasurementServiceProxy extends Proxy {
         Assert.notNull(command, "Command can not be null");
         Assert.notNull(command.getMessage(), "message can not be null");
         Assert.notNull(command.getKey(), "Key can not be null");
-        LOG.debug("processMeasurement: Sending ProcessMeasurementCommand to a topic {} with a key {}. Timeout set to {}", PROCESS_MEASUREMENT_TOPIC, command.getKey(), RESPONSE_TIMEOUT_SECONDS);
+        LOG.info("processMeasurement: Sending ProcessMeasurementCommand to a topic {} with a key {}. Timeout set to {}", PROCESS_MEASUREMENT_TOPIC, command.getKey(), RESPONSE_TIMEOUT_SECONDS);
         if (command.getMessage().getTopic() != null && !PROCESS_MEASUREMENT_TOPIC.equals(command.getMessage().getTopic())) {
             throw new RuntimeException("Topic name of the message [" + command.getMessage().getTopic() + "] does not match topic name of this Producer [" + PROCESS_MEASUREMENT_TOPIC + "]");
         }
 
         return template.sendAndReceive(
-                new ProducerRecord<>(PROCESS_MEASUREMENT_TOPIC, command.getKey(), command),
+                new ProducerRecord<>(PROCESS_MEASUREMENT_TOPIC, command.getKey(), command.getMessage()),
                 Duration.ofSeconds(RESPONSE_TIMEOUT_SECONDS)
         );
     }

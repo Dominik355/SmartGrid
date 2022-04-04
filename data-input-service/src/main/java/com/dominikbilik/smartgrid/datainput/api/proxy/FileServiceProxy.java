@@ -1,4 +1,4 @@
-package com.dominikbilik.smartgrid.datainput.saga.impl;
+package com.dominikbilik.smartgrid.datainput.api.proxy;
 
 import com.dominikbilik.smartgrid.datainput.saga.MessageSupplier;
 import com.dominikbilik.smartgrid.fileService.api.v1.events.ProcessFileCommand;
@@ -40,6 +40,8 @@ public class FileServiceProxy extends Proxy {
     public FileServiceProxy(ProducerFactory<String, Object> producerFactory,
                             ConcurrentKafkaListenerContainerFactory<String, Object> containerFactory) {
         super(producerFactory, containerFactory);
+        System.out.println("key serializer ce: " + producerFactory.getKeySerializer());
+        System.out.println("value serializer ce: " + producerFactory.getConfigurationProperties());
     }
 
     @PostConstruct
@@ -48,6 +50,8 @@ public class FileServiceProxy extends Proxy {
         container.getContainerProperties().setGroupId(CONSUMER_GROUP_ID);
 
         template = new ReplyingKafkaTemplate<>(getProducerFactory(), container);
+        System.out.println("key serializer: " + template.getProducerFactory().getKeySerializer());
+        System.out.println("value serializer: " + template.getProducerFactory().getValueSerializer());
         template.setCorrelationIdStrategy(CORRELATION_STRATEGY);
         template.start();
     }
@@ -56,7 +60,7 @@ public class FileServiceProxy extends Proxy {
         Assert.notNull(command, "Command can not be null");
         Assert.notNull(command.getMessage(), "message can not be null");
         Assert.notNull(command.getKey(), "Key can not be null");
-        LOG.debug("processFile: Sending ProcessFileCommand to a topic {} with a key {} for fileName {}. Timeout set to {} seconds", PROCESS_FILE_TOPIC, command.getKey(), RESPONSE_TIMEOUT_SECONDS, command.getMessage().getFileName());
+        LOG.info("processFile: Sending ProcessFileCommand to a topic {} with a key {} for fileName {}. Timeout set to {} seconds", PROCESS_FILE_TOPIC, command.getKey(), command.getMessage().getFileName(), RESPONSE_TIMEOUT_SECONDS);
         if (command.getMessage().getTopic() != null && !PROCESS_FILE_TOPIC.equals(command.getMessage().getTopic())) {
             throw new RuntimeException("Topic name of the message [" + command.getMessage().getTopic() + "] does not match topic name of this Producer [" + PROCESS_FILE_TOPIC + "]");
         }
@@ -70,7 +74,7 @@ public class FileServiceProxy extends Proxy {
         Assert.notNull(command, "Command can not be null");
         Assert.notNull(command.getMessage(), "message can not be null");
         Assert.notNull(command.getKey(), "Key can not be null");
-        LOG.debug("reverseProcessingFile: Sending ReverseProcessFileCommand to a topic {} with a key {} for fileId {}", UNPROCESS_FILE_TOPIC, command.getKey(), command.getMessage().getFileId());
+        LOG.info("reverseProcessingFile: Sending ReverseProcessFileCommand to a topic {} with a key {} for fileId {}", UNPROCESS_FILE_TOPIC, command.getKey(), command.getMessage().getFileId());
         if (command.getMessage().getTopic() != null && !UNPROCESS_FILE_TOPIC.equals(command.getMessage().getTopic())) {
             throw new RuntimeException("Topic name of the message [" + command.getMessage().getTopic() + "] does not match topic name of this Producer [" + UNPROCESS_FILE_TOPIC + "]");
         }

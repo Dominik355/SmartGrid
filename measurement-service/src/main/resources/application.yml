@@ -8,6 +8,11 @@ spring:
     init:
       data-locations: classpath:sql/*.sql # or create DataSourceInitializer Bean
       mode: always
+  kafka:
+    bootstrap:
+      server: localhost:29092
+    client:
+      timeout: 30000
 
 app:
   datasource:

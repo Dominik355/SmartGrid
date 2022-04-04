@@ -17,7 +17,6 @@ public class FileProcessingApi {
     @SendTo("process_file_reply")
     public Message<ProcessFileCommandResponse> listen(ConsumerRecord<String, ProcessFileCommand> record) {
         System.out.println("Received: " + record.value() + ", with key: " + record.key() + ", with offset: " + record.offset() + ", with Headers: " + record.headers());
-        String k = record.key();
 
         ProcessFileCommandResponse response = new ProcessFileCommandResponse();
         response.setFileId(111111L);
@@ -26,10 +25,9 @@ public class FileProcessingApi {
         response.setDeviceNameFromFile("testNameFromFile");
         System.out.println("Sending back : " + response);
 
-        Message<ProcessFileCommandResponse> message = MessageBuilder.withPayload(response)
+        return MessageBuilder.withPayload(response)
                 .setHeader(KafkaHeaders.MESSAGE_KEY, record.key())
                 .build();
-        return message;
     }
 
 }

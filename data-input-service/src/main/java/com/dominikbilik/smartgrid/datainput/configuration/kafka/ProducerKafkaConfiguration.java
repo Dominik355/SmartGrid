@@ -15,13 +15,13 @@ import java.util.Map;
 import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 @Configuration
-@DependsOn({"kafkaConfiguration","TopicsConfiguration"})
+@DependsOn({"kafkaConfiguration","topicsConfiguration"})
 public class ProducerKafkaConfiguration {
 
     public Map<String, Object> producerConfigs() {
         Map<String, Object> properties = new HashMap<>();
 
-        properties.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(KEY_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         properties.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         properties.put(MAX_REQUEST_SIZE_CONFIG, 1024 * 1024 * 10); // 10MB max size (basic is 1M)
 
@@ -35,6 +35,7 @@ public class ProducerKafkaConfiguration {
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         DefaultKafkaProducerFactory<String, Object> factory = new DefaultKafkaProducerFactory<>(producerConfigs());
+        System.out.println("rovno v configu : " + factory.getKeySerializer());
         return factory;
     }
 
