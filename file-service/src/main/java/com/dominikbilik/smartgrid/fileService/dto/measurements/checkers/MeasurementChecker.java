@@ -1,12 +1,11 @@
 package com.dominikbilik.smartgrid.fileService.dto.measurements.checkers;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.Measurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.MultiValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.SingleValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord;
-import com.dominikbilik.smartgrid.fileService.dto.records.SingleMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
-import org.springframework.stereotype.Component;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.SingleMeasurementRecord;
 import org.springframework.util.Assert;
 
 /**

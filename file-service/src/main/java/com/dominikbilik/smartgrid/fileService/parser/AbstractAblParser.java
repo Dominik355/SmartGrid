@@ -1,11 +1,11 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.Measurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime;
-import com.dominikbilik.smartgrid.fileService.dto.records.MeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MeasurementRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 

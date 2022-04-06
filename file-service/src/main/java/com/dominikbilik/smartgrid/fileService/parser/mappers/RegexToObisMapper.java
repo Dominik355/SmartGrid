@@ -1,10 +1,9 @@
 package com.dominikbilik.smartgrid.fileService.parser.mappers;
 
-import com.dominikbilik.smartgrid.fileService.dto.records.ObisInfoRecord;
-import com.dominikbilik.smartgrid.fileService.dto.records.ObisSingleMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.parser.holders.ObisHolder;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisInfoRecord;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisSingleMeasurementRecord;
 
-import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 
 public class RegexToObisMapper {

@@ -1,17 +1,17 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.MultiValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType.OBIS;
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime.PERIODICAL;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType.*;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime.*;
 
 public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasurementRecord, MultiValuesMeasurement> {
 

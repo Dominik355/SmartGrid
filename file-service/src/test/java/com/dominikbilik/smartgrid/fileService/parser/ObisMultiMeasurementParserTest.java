@@ -1,11 +1,11 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
 import com.dominikbilik.smartgrid.fileService.TestUtils;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.MultiValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
-import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.service.parser.impl.FileParserServiceImpl;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

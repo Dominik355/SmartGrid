@@ -48,7 +48,29 @@ public class ParserUtils {
          * This regex pattern should be able to recognize all possible variants of obis records.
          * Price for this are unnecesarry groups. It should be clear after reviewing these examples:
          * Input: "4-8:1.6.2*03(06.06*kW)(1210908210000)"
-         * Result: Group 1: 4
+         * Result: Group 1: 4 = 7;
+         *
+         *         public static boolean isHeaderTagLine(String line) {
+         *             return line != null && line.strip().equals(HEADER_TAG);
+         *         }
+         *
+         *         public static boolean isBodyTagLine(String line) {
+         *             return line != null && line.strip().contains(BODY_TAG);
+         *         }
+         *
+         *         public static boolean isEndingLine(String line) {
+         *             return line != null && line.strip().equals(OBIS_ENDING_TAG);
+         *         }
+         *
+         *         public static final List<String> HEADERS = ListUtils.unmodifiableList(new ArrayList<>(){{
+         *                 add("PROT");
+         *                 add("MAN1");
+         *                 add("ZNR1");
+         *                 add("DATE");
+         *                 add("TIME");
+         *         }});
+         *
+         *         public static final DateTimeFormatter DATE_FOR
          *         Group 2: 8
          *         Group 3: 1
          *         Group 4: 6

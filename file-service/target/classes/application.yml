@@ -15,3 +15,8 @@ spring:
       server: localhost:29092
     client:
       timeout: 30000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/

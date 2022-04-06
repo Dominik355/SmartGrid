@@ -1,10 +1,10 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.MultiValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.ParserUtils;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType.METEO;
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime.PERIODICAL;
+import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.FILENAME_PATTERN;
+import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.FILENAME_SEPARATOR;
 import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.MeteoUtils.*;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType.METEO;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime.PERIODICAL;
 
 public class MeteoParser extends MeasurementParser<MultiValuesMeasurement> {
 
@@ -40,6 +40,8 @@ public class MeteoParser extends MeasurementParser<MultiValuesMeasurement> {
         try {
             // validate input
             validateInput();
+
+            parseFilename(fileName);
 
             // we dont parse filename , cause here it says nothing, usually looks like 'download08'
 
@@ -70,6 +72,13 @@ public class MeteoParser extends MeasurementParser<MultiValuesMeasurement> {
         }
 
         return this.measurement;
+    }
+
+    private void parseFilename(String filename) {
+        String[] values = fileName.split(FILENAME_SEPARATOR);
+
+        this.measurement.setDeviceId(values[0]);
+        this.measurement.setDeviceName(values[1]);
     }
 
     @Override

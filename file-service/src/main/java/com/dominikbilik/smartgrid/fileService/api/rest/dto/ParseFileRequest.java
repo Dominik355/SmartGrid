@@ -1,7 +1,7 @@
 package com.dominikbilik.smartgrid.fileService.api.rest.dto;
 
 import com.dominikbilik.smartgrid.fileService.api.validation.annotations.EnumValidator;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
 
 public class ParseFileRequest {
 

@@ -1,10 +1,9 @@
 package com.dominikbilik.smartgrid.measureddata.service.mappers;
 
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.domain.entity.Measurement;
 
 public class MeasurementMapper {
-
+/*
     public static Measurement dtoToEntity(MeasurementDto dto) {
         Measurement entity = new Measurement();
 /*
@@ -30,7 +29,7 @@ public class MeasurementMapper {
         dto.getMeasurementTypeByTime();
         dto.getFrom();
         dto.getTo();
-*/
+
         return entity;
-    }
+    }*/
 }

@@ -1,8 +1,8 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.Measurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime;
 
 import java.util.List;
 

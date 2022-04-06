@@ -29,7 +29,7 @@ public class SagaManager {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public void start(Saga saga) {
+    public SagaInstance start(Saga saga) {
         Assert.notNull(saga, "Saga can not be null !!!");
         Assert.isTrue(CollectionUtils.isNotEmpty(saga.getSteps()), "Steps can not be empty !!!");
         LOG.debug("Starting to process new Saga of type {} with systemID {}", saga.getSagaName(), saga.getSagaSystemId());
@@ -39,9 +39,6 @@ public class SagaManager {
 
         SagaInstance sagaInstance = new SagaInstance(
                 saga.getSagaName(),
-                IntStream.range(0, steps.size())
-                        .mapToObj(i -> new SagaStepInstance(i, steps.get(i).getStepName())).
-                        collect(Collectors.toList()),
                 LocalDateTime.now(),
                 steps.get(0).getResultState().initialState().getName(),
                 saga.getSagaSystemId()
@@ -56,7 +53,12 @@ public class SagaManager {
             LOG.info("Executing step {} named {} in Saga {}.", currentReadableStep, currentStep.getStepName(), saga.getSagaName());
             try {
                 // execute step and update sagainstance endingstate
+                SagaStepInstance sagaStepInstance = new SagaStepInstance(currentReadableStep, currentStep.getStepName(), LocalDateTime.now());
+
                 SagaState state = saga.executeAction(stepIterator);
+
+                sagaStepInstance.setEndTime(LocalDateTime.now());
+                sagaInstance.addStep(sagaStepInstance);
                 sagaInstance.setEndState(state.getName());
                 sagaInstanceRepository.save(sagaInstance);
             } catch (Exception ex) {
@@ -83,10 +85,14 @@ public class SagaManager {
             LOG.warn("Error occured while trying to convert object of saga data {} into json string", saga.getData());
         }
         sagaInstance.setFinishTime(LocalDateTime.now());
-        sagaInstanceRepository.save(sagaInstance);
+        return sagaInstanceRepository.save(sagaInstance);
     }
 
     private void executeCompensations(Saga saga, SagaInstance sagaInstance, int errorStep) {
+        if (errorStep == 0) {
+            LOG.info("Error occured at first step, there is nothing to compensate");
+            return;
+        }
         LOG.info("Compensation process for saga {} starting from step {}", saga.getSagaName(), errorStep - 1);
         sagaInstance.setCompleted(Boolean.FALSE);
         sagaInstance.setErrorTime(LocalDateTime.now());

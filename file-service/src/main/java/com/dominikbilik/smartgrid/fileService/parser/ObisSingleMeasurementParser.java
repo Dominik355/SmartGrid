@@ -1,18 +1,18 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.fileService.dto.measurements.SingleValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.records.ObisSingleMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.parser.holders.ObisHolder;
 import com.dominikbilik.smartgrid.fileService.parser.mappers.RegexToObisMapper;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisSingleMeasurementRecord;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType.OBIS;
-import static com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementTypeByTime.INSTANT;
 import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.OBIS_PATTERN;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType.OBIS;
+import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime.INSTANT;
 
 public class ObisSingleMeasurementParser extends AbstractAblParser<ObisSingleMeasurementRecord, SingleValuesMeasurement> {
 

@@ -1,11 +1,11 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
 import com.dominikbilik.smartgrid.fileService.TestUtils;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.MultiValuesMeasurement;
-import com.dominikbilik.smartgrid.fileService.dto.measurements.enums.MeasurementType;
-import com.dominikbilik.smartgrid.fileService.dto.records.MultiMeasurementRecord;
 import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.service.parser.impl.FileParserServiceImpl;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,10 +26,10 @@ public class MeteoParserTest {
     @Parameters
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {"Meteo/downld02.txt", LocalDateTime.of(2021, 7, 19, 1, 0), LocalDateTime.of(2021, 7, 20, 20, 29)},
-                {"Meteo/downld03.txt", LocalDateTime.of(2021, 7, 19, 1, 0), LocalDateTime.of(2021, 7, 19, 1, 38)},
-                {"Meteo/downld05.txt", LocalDateTime.of(2021, 8, 24, 1, 0), LocalDateTime.of(2021, 8, 31, 7, 17)},
-                {"Meteo/downld08.txt", LocalDateTime.of(2021, 10, 6, 3, 50), LocalDateTime.of(2021, 10, 6, 4, 9)}
+                {"Meteo/meteo_875.txt", LocalDateTime.of(2021, 7, 19, 1, 0), LocalDateTime.of(2021, 7, 20, 20, 29)},
+                {"Meteo/meteo_876.txt", LocalDateTime.of(2021, 7, 19, 1, 0), LocalDateTime.of(2021, 7, 19, 1, 38)},
+                {"Meteo/meteo_877.txt", LocalDateTime.of(2021, 8, 24, 1, 0), LocalDateTime.of(2021, 8, 31, 7, 17)},
+                {"Meteo/meteo_878.txt", LocalDateTime.of(2021, 10, 6, 3, 50), LocalDateTime.of(2021, 10, 6, 4, 9)}
         });
     }
 

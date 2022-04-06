@@ -35,9 +35,8 @@ public class SagaInstance {
 
     public SagaInstance() {}
 
-    public SagaInstance(String sagaType, List<SagaStepInstance> steps, LocalDateTime creationTime, String state, String sagaSystemId) {
+    public SagaInstance(String sagaType, LocalDateTime creationTime, String state, String sagaSystemId) {
         this.sagaType = sagaType;
-        this.steps = steps;
         this.creationTime = creationTime;
         this.endState = state;
         this.sagaSystemId = sagaSystemId;

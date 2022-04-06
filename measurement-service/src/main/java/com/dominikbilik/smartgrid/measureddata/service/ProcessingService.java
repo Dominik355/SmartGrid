@@ -1,6 +1,7 @@
 package com.dominikbilik.smartgrid.measureddata.service;
 
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.measurements.MeasurementDto;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ProcessingService {
     // ulozit records
     // updatnut records view (udrziavanie udajov za poslednych 24 hodin)
     @Transactional
-    public <T extends MeasurementDto> void processMeasurement(T measurementDto) {
+    public <T extends Measurement> void processMeasurement(T measurementDto) {
 
     }
 

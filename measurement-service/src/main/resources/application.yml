@@ -23,6 +23,11 @@ app:
       password: dominik
       maxPoolSize: 30
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+
 
 logging:
   level:
