@@ -1,7 +1,6 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
 import com.dominikbilik.smartgrid.fileService.TestUtils;
-import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.service.parser.impl.FileParserServiceImpl;
 
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleValuesMeasurement;
@@ -20,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(Parameterized.class)
 public class ObisSingleMeasurementParserTest {
 
-    private FileParserService fileParserService = new FileParserServiceImpl();
+    private FileParserServiceImpl fileParserService = new FileParserServiceImpl();
 
     @Parameters
     public static Object[] data() {

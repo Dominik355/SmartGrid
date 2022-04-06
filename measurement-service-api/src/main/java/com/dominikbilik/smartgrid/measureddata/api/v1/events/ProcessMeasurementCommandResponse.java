@@ -24,4 +24,11 @@ public class ProcessMeasurementCommandResponse implements MessageReply {
     public String getTopic() {
         return "process_measurement_reply";
     }
+
+    @Override
+    public String toString() {
+        return "ProcessMeasurementCommandResponse{" +
+                "measurementId=" + measurementId +
+                '}';
+    }
 }

@@ -9,3 +9,5 @@ eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
+  server:
+    maxThreadsForPeerReplication: 0 # becasue we are not using default port, we have to stop replication attempts

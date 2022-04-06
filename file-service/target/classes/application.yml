@@ -5,6 +5,17 @@ spring:
   application:
     name: file-service
 
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/file_service_db?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+    username: dominik
+    password: dominik
+  jpa:
+    open-in-view: false #https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-view-true-property-in-spring-boot
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
   servlet:
     multipart:
       max-file-size: 10MB

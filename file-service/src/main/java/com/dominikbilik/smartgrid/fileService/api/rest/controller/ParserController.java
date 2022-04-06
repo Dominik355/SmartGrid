@@ -1,7 +1,6 @@
 package com.dominikbilik.smartgrid.fileService.api.rest.controller;
 
 import com.dominikbilik.smartgrid.fileService.api.rest.dto.ParseFileRequest;
-import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.service.parser.impl.FileParserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +31,11 @@ public class ParserController {
         return ResponseEntity.ok(fileParserService.parseFile(file, request.getFullFileName(), request.getMeasuremetType()));
     }
 
-    @PostMapping(value = "uploadMeasurementFile",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<String> uploadMeasurementFile(
-            @RequestPart(name = "file") MultipartFile file) {
-        Assert.notNull(file.getSize(), "File can not be empty");
-        LOG.info("ParserController.parseMeasurementFile(). parseMeasurementFile = {}", getFileInfo(file));
-        fileParserService.addFileToMap(file.getOriginalFilename(), file);
-        return ResponseEntity.ok("File added");
+    @GetMapping(value = "parseSavedFile")
+    public ResponseEntity<Object> parseSavedFile(@RequestParam(name = "fileName") String fileName){
+        Assert.notNull(fileName, "FileId can not be empty");
+        LOG.info("ParserController.parseSavedFile(). fileName = {}}", fileName);
+        return ResponseEntity.ok(fileParserService.parseSavedFile(fileName));
     }
 
     @GetMapping(value = "getParsedFile")

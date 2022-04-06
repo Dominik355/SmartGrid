@@ -22,7 +22,7 @@ public class NewMeasurementService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewMeasurementService.class);
 
-    private static final String UPLOAD_FILE_URL = "http://file-service/api/v1/fileParser/uploadMeasurementFile";
+    private static final String UPLOAD_FILE_URL = "http://file-service/api/v1/files/uploadMeasurementFile";
 
     @Autowired
     private SagaManager sagaManager;
@@ -61,9 +61,11 @@ public class NewMeasurementService {
         body.add("file", file.getResource());
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        LOG.info("Sending HttpEntity to file-service saveFile endpoint: " + requestEntity);
 
         ResponseEntity<String> response = template.postForEntity(UPLOAD_FILE_URL, requestEntity, String.class);
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+
         return response.getBody();
     }
 

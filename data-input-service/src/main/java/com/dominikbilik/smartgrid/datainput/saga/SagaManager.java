@@ -47,6 +47,7 @@ public class SagaManager {
 
         int numOfSteps = saga.getSteps().size();
         int stepIterator;
+        boolean completed = false;
         for (stepIterator = 0; stepIterator < numOfSteps; stepIterator++) {
             int currentReadableStep = stepIterator+1;
             SagaStep currentStep = steps.get(stepIterator);
@@ -69,12 +70,19 @@ public class SagaManager {
                 ex.printStackTrace();
                 break;
             }
+
+            if (stepIterator == numOfSteps - 1) {
+                LOG.info("Saga was successfuly completed");
+                completed = true;
+            }
         }
 
-        if (stepIterator != steps.size() - 1) {
+        if (!completed) {
+            LOG.info("{} steps we executed, but error occured at last executed step", stepIterator);
             // so, not all steps executed, that means exception occured -> lets execute compensation
             executeCompensations(saga, sagaInstance, stepIterator);
         } else {
+            LOG.info("Setting completed and end state parameter for saga instance");
             sagaInstance.setCompleted(Boolean.TRUE);
             sagaInstance.setEndState(saga.getSteps().get(0).getResultState().endingState().getName());
         }
@@ -84,6 +92,7 @@ public class SagaManager {
         } catch (Exception e) {
             LOG.warn("Error occured while trying to convert object of saga data {} into json string", saga.getData());
         }
+
         sagaInstance.setFinishTime(LocalDateTime.now());
         return sagaInstanceRepository.save(sagaInstance);
     }

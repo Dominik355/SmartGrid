@@ -40,6 +40,7 @@ public class MeasurementChecker {
         }
         if (measurement.getDeviceDataset() == null && measurement.getHeaders().get("DATASET") != null) {
             measurement.setDeviceDataset(measurement.getHeaders().get("DATASET"));
+            measurement.setDeviceName(measurement.getHeaders().get("DATASET"));
         }
         if (measurement.getTo() == null) {
             measurement.setTo(measurement.getDateTimeFromHeader()

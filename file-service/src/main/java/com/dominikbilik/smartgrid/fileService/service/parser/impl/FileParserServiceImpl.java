@@ -1,11 +1,12 @@
 package com.dominikbilik.smartgrid.fileService.service.parser.impl;
 
 import com.dominikbilik.smartgrid.fileService.api.v1.events.ProcessFileCommandResponse;
+import com.dominikbilik.smartgrid.fileService.domain.dao.File;
+import com.dominikbilik.smartgrid.fileService.domain.repository.FileRepository;
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.parser.MeteoParser;
 import com.dominikbilik.smartgrid.fileService.parser.ObisMultiMeasurementParser;
 import com.dominikbilik.smartgrid.fileService.parser.ObisSingleMeasurementParser;
-import com.dominikbilik.smartgrid.fileService.service.parser.FileParserService;
 import com.dominikbilik.smartgrid.fileService.utils.FileUtils;
 import com.dominikbilik.smartgrid.fileService.utils.common.SupplierFactory;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
@@ -14,10 +15,13 @@ import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleVal
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisSingleMeasurementRecord;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,18 +37,35 @@ import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.en
 import static com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType.METEO;
 
 @Service
-public class FileParserServiceImpl implements FileParserService {
+public class FileParserServiceImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileParserServiceImpl.class);
+
+    @Autowired
+    private FileRepository fileRepository;
 
     // because parsers are stateful, this force us to use new instance everytime (or declare Prototype bean and autowire that)
     private SupplierFactory<ObisSingleMeasurementParser> obisSingleParser = new SupplierFactory<>(() -> new ObisSingleMeasurementParser());
     private SupplierFactory<ObisMultiMeasurementParser> obisMultiParser = new SupplierFactory<>(() -> new ObisMultiMeasurementParser());
     private SupplierFactory<MeteoParser> meteoParser = new SupplierFactory<>(() -> new MeteoParser());
 
-    @Override
+    public Measurement parseFile(File file) {
+        LOG.info("Parsing service method parseFile(File) called for file : {}", file);
+
+        List<String> fileLines;
+        try {
+            fileLines = FileUtils.getLinesOfTextFile(file.getData());
+        } catch (Exception e) {
+            LOG.info("Exception occured while trying to get text out of File [{}]", file.getName());
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return parseFile(fileLines, file.getName(), file.getFileType());
+    }
+
     public Measurement parseFile(MultipartFile file, String fileName, String fileType) {
-        LOG.info("Parsing service method parseFile() called for : filename={}, filetype={}", (fileName != null ? fileName : file.getOriginalFilename()), fileType);
+        LOG.info("Parsing service method parseFile(MultipartFile) called for : filename={}, filetype={}", (fileName != null ? fileName : file.getOriginalFilename()), fileType);
         if (fileName != null && !file.getOriginalFilename().equals(fileName)) {
             throw new IllegalArgumentException("Provided filename [{" + fileName + "}] does not match name of provided file [{" + file.getOriginalFilename() + "}]");
         } else if (StringUtils.isEmpty(fileName)) {
@@ -61,6 +82,13 @@ public class FileParserServiceImpl implements FileParserService {
             throw new RuntimeException(e.getMessage());
         }
 
+        return parseFile(fileLines, fileName, fileType);
+    }
+
+    public Measurement parseFile(List<String> fileLines, String fileName, String fileType) {
+        LOG.info("Parsing service method parseFile(fileLines) called for : filename={}, filetype={}", fileName, fileType);
+        Assert.isTrue(CollectionUtils.isNotEmpty(fileLines), "Lines can not be empty !!!");
+
         switch (MeasurementType.valueOf(fileType)) {
             case OBIS:
                 return parseSingleMeasurementFile(fileLines, fileName, fileType);
@@ -73,7 +101,6 @@ public class FileParserServiceImpl implements FileParserService {
         }
     }
 
-    @Override
     public MultiValuesMeasurement<MultiMeasurementRecord> parseMultiMeasurementFile(List<String> file, String fileName, String fileType) {
         Assert.noNullElements(file, "File list can not be null nor empty");
         Assert.notNull(fileName, "Filename can not be null");
@@ -92,7 +119,6 @@ public class FileParserServiceImpl implements FileParserService {
         return measurement;
     }
 
-    @Override
     public SingleValuesMeasurement<ObisSingleMeasurementRecord> parseSingleMeasurementFile(List<String> file, String fileName, String fileType) {
         Assert.noNullElements(file, "File list can not be null nor empty");
         Assert.notNull(fileName, "Filename can not be null");
@@ -109,8 +135,6 @@ public class FileParserServiceImpl implements FileParserService {
     // we parse it first, time and store in map until someone calls for that
     // key -> "fileId" , value - parsed file into measurement
     private ConcurrentMap<Long, Measurement> measurementMap = new ConcurrentHashMap<>();
-    // key -> "fileName", value - multipartfile representing measurement
-    private ConcurrentMap<String, MultipartFile> fileMap = new ConcurrentHashMap<>();
 
     // just to make sure, we wont leak memory, cause some object cna be few MB big
     public void addMeasurementToMap(Long fileId, Measurement measurement) {
@@ -118,7 +142,7 @@ public class FileParserServiceImpl implements FileParserService {
             measurementMap.clear();
         }
         measurementMap.put(fileId, measurement);
-        System.out.println("measurementMap current state : " + measurementMap);
+        LOG.info("measurementMap current state : " + measurementMap);
     }
 
     public Measurement getMeasurementByFileId(long fileId) {
@@ -126,45 +150,20 @@ public class FileParserServiceImpl implements FileParserService {
         return measurementMap.remove(fileId);
     }
 
-    public void addFileToMap(String filename, MultipartFile file) {
-        if (fileMap.size() > 20) {
-            fileMap.clear();
-        }
-        fileMap.put(filename, file);
-        LOG.info("fileMap current state : " + fileMap);
-    }
-
-    public MultipartFile getFileByFilename(String filename) {
-        LOG.info("FileMap state : {}", fileMap);
-        return fileMap.remove(filename);
-    }
-
-    // parse stored file in fileMap and put it into measurementMap to get these data later in saga
-    // hard coded implementation just for demonstration !!!!!!!!!!!!
+    @Transactional
     public ProcessFileCommandResponse parseSavedFile(String fileName) {
         LOG.info("Parsing saved file with name : " + fileName);
-        MultipartFile file = getFileByFilename(fileName);
+        File file = fileRepository.findByName(fileName);
         if (file == null) {
             throw new RuntimeException("File {} not found" + fileName);
         }
-        LOG.info("File found : " + file);
-        String currentFilename = file.getOriginalFilename() != null ?  file.getOriginalFilename() : file.getName();
-        String fileType;
-        if (currentFilename.contains("_meteo_")) {
-            fileType = "METEO";
-        } else if (currentFilename.contains("_P01_") || currentFilename.contains("_P02_")) {
-            fileType = "CLASSIC_OBIS";
-        } else {
-            fileType = "OBIS";
-        }
 
-        Measurement measurement = parseFile(file, file.getOriginalFilename(), fileType);
-        Long fileId = ThreadLocalRandom.current().nextLong(1000, 1000000);
-        addMeasurementToMap(fileId, measurement);
+        Measurement measurement = parseFile(file);
+        addMeasurementToMap(file.getId(), measurement);
 
         return new ProcessFileCommandResponse(
                 measurement.getSourceFileName(),
-                fileId,
+                file.getId(),
                 measurement.getDeviceId(),
                 measurement.getDeviceName()
         );
