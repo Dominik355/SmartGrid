@@ -29,7 +29,7 @@ public class DeviceController {
         Assert.notNull(request, "request can not be null");
         Assert.isTrue(StringUtils.isNotBlank(request.getName()), "device name can not be blank");
         Assert.isTrue(StringUtils.isNotBlank(request.getIdInFilename()), "id can not be blank");
-        Assert.isTrue(NumberUtils.isCreatable(request.getIdInFilename()) && Long.parseLong(request.getIdInFilename()) > 0, "ID has to consist only of positive whole numbers (long value)");
+        Assert.isTrue(NumberUtils.isParsable(request.getIdInFilename()) && Long.parseLong(request.getIdInFilename()) > 0, "ID has to consist only of positive whole numbers (long value)");
 
         return ResponseEntity.ok(new RegisterDeviceResponse(deviceService.registerDevice(request)));
     }

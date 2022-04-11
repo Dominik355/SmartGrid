@@ -1,0 +1,6 @@
+logging:
+  level:
+    com:
+      dominikbilik:
+        smartgrid:
+          measureddata: ERROR

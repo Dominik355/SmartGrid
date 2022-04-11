@@ -3,12 +3,12 @@ package com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisInfoRecord;
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.SingleMeasurementRecord;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.ObisSingleMeasurementRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleValuesMeasurement<T extends SingleMeasurementRecord> extends Measurement {
+public class SingleValuesMeasurement<T extends ObisSingleMeasurementRecord> extends MeasurementDto {
 
     static final long serialVersionUID = 222L;
 
@@ -17,6 +17,9 @@ public class SingleValuesMeasurement<T extends SingleMeasurementRecord> extends 
 
     public SingleValuesMeasurement(MeasurementType measurementType, MeasurementTypeByTime measurementTypeByTime) {
         super(measurementType, measurementTypeByTime);
+    }
+
+    public SingleValuesMeasurement() {
     }
 
     public List<T> getRecords() {
@@ -47,5 +50,13 @@ public class SingleValuesMeasurement<T extends SingleMeasurementRecord> extends 
             infoRecords = new ArrayList<>();
         }
         infoRecords.add(record);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", SingleValuesMeasurement{" +
+                "recordsSize=" + records.size() +
+                ", infoRecordsSize=" + infoRecords.size() +
+                '}';
     }
 }

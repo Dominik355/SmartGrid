@@ -6,12 +6,14 @@ public class ProcessMeasurementCommand implements Message {
 
     private Long measurementFileId;
     private Long deviceId;
+    private String measurementType;
 
     public ProcessMeasurementCommand() {}
 
-    public ProcessMeasurementCommand(Long measurementFileId, Long deviceId) {
+    public ProcessMeasurementCommand(Long measurementFileId, Long deviceId, String measurementType) {
         this.measurementFileId = measurementFileId;
         this.deviceId = deviceId;
+        this.measurementType = measurementType;
     }
 
     public Long getMeasurementFileId() {
@@ -30,8 +32,25 @@ public class ProcessMeasurementCommand implements Message {
         this.deviceId = deviceId;
     }
 
+    public String getMeasurementType() {
+        return measurementType;
+    }
+
+    public void setMeasurementType(String measurementType) {
+        this.measurementType = measurementType;
+    }
+
     @Override
     public String getTopic() {
         return "process_measurement";
+    }
+
+    @Override
+    public String toString() {
+        return "ProcessMeasurementCommand{" +
+                "measurementFileId=" + measurementFileId +
+                ", deviceId=" + deviceId +
+                ", measurementType='" + measurementType + '\'' +
+                '}';
     }
 }

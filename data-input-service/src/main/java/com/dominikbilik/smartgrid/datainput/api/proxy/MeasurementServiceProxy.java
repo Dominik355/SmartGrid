@@ -24,7 +24,7 @@ public class MeasurementServiceProxy extends Proxy {
 
     private static final Logger LOG = LoggerFactory.getLogger(MeasurementServiceProxy.class);
 
-    public static final long RESPONSE_TIMEOUT_SECONDS = 20; // kinda longer ,if whole measurement processing would take unexpectedly more time
+    public static final long RESPONSE_TIMEOUT_SECONDS = 1200; // kinda longer ,if whole measurement processing would take unexpectedly more time
     private static final String PROCESS_MEASUREMENT_TOPIC = "process_measurement";
     private static final String UNPROCESS_MEASUREMENT_TOPIC = "unprocess_measurement";
     private static final String PROCESS_MEASUREMENT_TOPIC_REPLY = "process_measurement_reply";

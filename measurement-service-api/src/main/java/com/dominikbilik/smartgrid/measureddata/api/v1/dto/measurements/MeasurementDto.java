@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class Measurement implements Serializable {
+public abstract class MeasurementDto implements Serializable {
 
     private String deviceId;
     private String deviceName;
@@ -30,12 +30,12 @@ public class Measurement implements Serializable {
 
     private LocalDateTime to;
 
-    protected Measurement(MeasurementType measurementType, MeasurementTypeByTime measurementTypeByTime) {
+    protected MeasurementDto(MeasurementType measurementType, MeasurementTypeByTime measurementTypeByTime) {
         this.measurementType = measurementType;
         this.measurementTypeByTime = measurementTypeByTime;
     }
 
-    protected Measurement() {
+    public MeasurementDto() {
     }
 
     public String getDeviceId() {
@@ -123,5 +123,21 @@ public class Measurement implements Serializable {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Measurement{" +
+                "deviceId='" + deviceId + '\'' +
+                ", deviceName='" + deviceName + '\'' +
+                ", deviceDataset='" + deviceDataset + '\'' +
+                ", headers=" + headers +
+                ", sourceFileName='" + sourceFileName + '\'' +
+                ", fileId=" + fileId +
+                ", measurementType=" + measurementType +
+                ", measurementTypeByTime=" + measurementTypeByTime +
+                ", from=" + from +
+                ", to=" + to +
+                '}';
     }
 }

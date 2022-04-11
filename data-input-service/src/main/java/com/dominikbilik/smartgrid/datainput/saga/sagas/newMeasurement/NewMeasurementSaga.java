@@ -47,8 +47,11 @@ public class NewMeasurementSaga extends Saga {
     public boolean executeCompensation(int stepNum) {
         SagaStep<NewMeasurementSagaState, NewMeasurementState> realStep = steps.get(stepNum);
 
-        MessageSupplier messageSupplier = realStep.getReverseCommandSupplier().apply(sagaState);
-        Boolean result = realStep.getReverseAction().apply(messageSupplier);
+        Boolean result = true;
+        if (realStep.getReplyProcessor() != null) {
+            MessageSupplier messageSupplier = realStep.getReverseCommandSupplier().apply(sagaState);
+            result = realStep.getReverseAction().apply(messageSupplier);
+        }
 
         return result.booleanValue();
     }

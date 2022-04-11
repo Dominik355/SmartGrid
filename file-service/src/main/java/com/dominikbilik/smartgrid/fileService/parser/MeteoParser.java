@@ -169,9 +169,9 @@ public class MeteoParser extends MeasurementParser<MultiValuesMeasurement> {
         // parallel processing of both sentences equally. I will compare the values with the list values from
         // ParserUtils and add them to the half found columns to avoid duplication. In this way,
         // we can successfully parse the entire header using spaces, even if the gap does not indicate column separation.
-        this.measurement.setQuantityNames(new String[] {"Date", "Time", "Temp Out", "Hi Temp", "Low Temp", "Out Hum",
+        this.measurement.setQuantityNames(new String[] {"Temp Out", "Hi Temp", "Low Temp", "Out Hum",
                 "Dew Pt.", "Wind Speed", "Wind Dir", "Wind Run", "Hi Speed", "Hi Dir", "Wind Chill", "Heat Index",
-                "THW Index", "THSW Index", "Bar", "Rain", "Rain Rate", "Solar Rad.", "Solar Energy", "UV Index",
+                "THW Index", "THSW Index", "Bar", "Rain", "Rain Rate", "Solar Rad.", "Solar Energy", "Hi Solar Rad.", "UV Index",
                 "UV Dose", "Hi UV", "Heat D-D", "Cool D-D", "In Temp", "In Hum", "In Dew", "In Heat", "In EMC",
                 "In Air Density", "ET", "Wind Samp", "Wind Tx", "ISS Recept", "Arc. Int."});
     }

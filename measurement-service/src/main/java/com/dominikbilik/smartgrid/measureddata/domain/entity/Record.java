@@ -1,5 +1,7 @@
 package com.dominikbilik.smartgrid.measureddata.domain.entity;
 
+import org.springframework.data.relational.core.mapping.Column;
+
 import java.time.LocalDateTime;
 
 /**
@@ -8,6 +10,7 @@ import java.time.LocalDateTime;
  */
 public class Record {
 
+    @Column("record_value")
     private Double value;
     private LocalDateTime dateTimeFrom; // if it is not a connection of multiple records, then the times are equal
     private LocalDateTime dateTimeTo;

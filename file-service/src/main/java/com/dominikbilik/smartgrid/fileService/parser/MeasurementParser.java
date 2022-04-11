@@ -1,6 +1,6 @@
 package com.dominikbilik.smartgrid.fileService.parser;
 
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * Was created in a hurry with not enought information
  * @param <M> measurement type
  */
-public abstract class MeasurementParser<M extends Measurement> {
+public abstract class MeasurementParser<M extends MeasurementDto> {
 
     protected final MeasurementType measurementType;
     protected final MeasurementTypeByTime measurementTypeByTime;

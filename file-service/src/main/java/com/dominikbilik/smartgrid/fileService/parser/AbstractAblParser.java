@@ -2,7 +2,7 @@ package com.dominikbilik.smartgrid.fileService.parser;
 
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
 import com.dominikbilik.smartgrid.fileService.utils.common.Tuple2;
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementTypeByTime;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MeasurementRecord;
@@ -13,7 +13,7 @@ import java.util.*;
 
 import static com.dominikbilik.smartgrid.fileService.utils.ParserUtils.ABLUtils.*;
 
-public abstract class AbstractAblParser<R extends MeasurementRecord, M extends Measurement> extends MeasurementParser<M> {
+public abstract class AbstractAblParser<R extends MeasurementRecord, M extends MeasurementDto> extends MeasurementParser<M> {
 
     protected Map<String, String> parsedFilename;
 

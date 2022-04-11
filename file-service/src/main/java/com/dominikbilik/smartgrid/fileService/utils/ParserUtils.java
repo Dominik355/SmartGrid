@@ -136,7 +136,7 @@ public class ParserUtils {
 
         public static final Map<String, Double> WIND_DIRECTIONS = MapUtils.unmodifiableMap(new HashMap<>(){{
                     put("N",0d);
-                    put("NNe",22.5d);
+                    put("NNE",22.5d);
                     put("NE",45d);
                     put("ENE",67.5d);
                     put("E",90d);
@@ -151,6 +151,7 @@ public class ParserUtils {
                     put("WNW",292.5d);
                     put("NW",315d);
                     put("NNW",337.5d);
+                    put("---",-1d);
         }});
 
         public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yy");

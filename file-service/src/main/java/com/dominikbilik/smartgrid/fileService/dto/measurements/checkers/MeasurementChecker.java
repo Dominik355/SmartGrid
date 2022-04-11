@@ -1,7 +1,7 @@
 package com.dominikbilik.smartgrid.fileService.dto.measurements.checkers;
 
 import com.dominikbilik.smartgrid.fileService.exception.SmartGridParsingException;
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleValuesMeasurement;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
@@ -21,7 +21,7 @@ public class MeasurementChecker {
         }
     }
 
-    public static void checkAndFillSingleValuesMeasurement(SingleValuesMeasurement<? extends SingleMeasurementRecord> measurement) {
+    public static void checkAndFillSingleValuesMeasurement(SingleValuesMeasurement measurement) {
         checkAndFillMeasurement(measurement);
 
         if (measurement.getFrom() == null) {
@@ -30,20 +30,20 @@ public class MeasurementChecker {
         }
     }
 
-    public static void checkAndFillMeasurement(Measurement measurement) {
-        Assert.notNull(measurement.getSourceFileName(), "Source filename can not be empty");
-        Assert.notNull(measurement.getMeasurementType(), "Measurement Type can not be empty");
-        Assert.notNull(measurement.getMeasurementTypeByTime(), "Measurement TypeByTime can not be empty");
+    public static void checkAndFillMeasurement(MeasurementDto measurementDto) {
+        Assert.notNull(measurementDto.getSourceFileName(), "Source filename can not be empty");
+        Assert.notNull(measurementDto.getMeasurementType(), "Measurement Type can not be empty");
+        Assert.notNull(measurementDto.getMeasurementTypeByTime(), "Measurement TypeByTime can not be empty");
 
-        if (measurement.getDeviceId() == null && measurement.getHeaders().get("ID") != null) {
-            measurement.setDeviceId(measurement.getHeaders().get("ID"));
+        if (measurementDto.getDeviceId() == null && measurementDto.getHeaders().get("ID") != null) {
+            measurementDto.setDeviceId(measurementDto.getHeaders().get("ID"));
         }
-        if (measurement.getDeviceDataset() == null && measurement.getHeaders().get("DATASET") != null) {
-            measurement.setDeviceDataset(measurement.getHeaders().get("DATASET"));
-            measurement.setDeviceName(measurement.getHeaders().get("DATASET"));
+        if (measurementDto.getDeviceDataset() == null && measurementDto.getHeaders().get("DATASET") != null) {
+            measurementDto.setDeviceDataset(measurementDto.getHeaders().get("DATASET"));
+            measurementDto.setDeviceName(measurementDto.getHeaders().get("DATASET"));
         }
-        if (measurement.getTo() == null) {
-            measurement.setTo(measurement.getDateTimeFromHeader()
+        if (measurementDto.getTo() == null) {
+            measurementDto.setTo(measurementDto.getDateTimeFromHeader()
                     .orElseThrow(() -> new SmartGridParsingException("Measurement headers does not contain DATE and TIME values")));
         }
     }

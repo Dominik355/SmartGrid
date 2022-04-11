@@ -49,6 +49,7 @@ public class FileService {
      * @return boolean telling if file was deleted
      */
     public boolean deleteFile(Long fileId) {
+        LOG.info("Deleting file [fileId={}]", fileId);
         fileRepository.deleteById(fileId);
         return !fileRepository.existsById(fileId);
     }

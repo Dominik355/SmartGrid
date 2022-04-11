@@ -77,13 +77,13 @@ public class RegexToObisMapper {
 
     public static ObisSingleMeasurementRecord obisHolderToObisSingleMeasurementRecord(ObisHolder holder) {
         return (holder == null) ? null : new ObisSingleMeasurementRecord.Builder()
-                .withMedium(((holder.getA() != null) ? Integer.parseInt(holder.getA()) : 0))
-                .withChannel(((holder.getB() != null) ? Integer.parseInt(holder.getB()) : 0))
-                .withMeasurementVariable(((holder.getC() != null) ? Integer.parseInt(holder.getC()) : 0))
-                .withMeasurementType(((holder.getD() != null) ? Integer.parseInt(holder.getD()) : 0))
-                .withTariff(((holder.getE() != null) ? Integer.parseInt(holder.getE()) : 0))
-                .withPreviousMeasurement(((holder.getF() != null) ? Integer.parseInt(holder.getF()) : 0))
-                .withValue(((holder.getValue() != null) ? Double.parseDouble(holder.getValue()) : 0))
+                .withMedium(((holder.getA() != null) ? Integer.parseInt(holder.getA()) : null))
+                .withChannel(((holder.getB() != null) ? Integer.parseInt(holder.getB()) : null))
+                .withMeasurementVariable(((holder.getC() != null) ? Integer.parseInt(holder.getC()) : null))
+                .withMeasurementType(((holder.getD() != null) ? Integer.parseInt(holder.getD()) : null))
+                .withTariff(((holder.getE() != null) ? Integer.parseInt(holder.getE()) : null))
+                .withPreviousMeasurement(((holder.getF() != null) ? Integer.parseInt(holder.getF()) : null))
+                .withValue(((holder.getValue() != null) ? Double.parseDouble(holder.getValue()) : null))
                 .withUnit(holder.getUnit())
                 .withDescription(holder.getDescription())
                 .build();

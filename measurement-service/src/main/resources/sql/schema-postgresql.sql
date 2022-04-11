@@ -1,45 +1,47 @@
 DROP TABLE IF EXISTS DATASET_QUANTITY_JOINS;
 DROP TABLE IF EXISTS IMPLEMENTED_TABLE;
-DROP TABLE IF EXISTS RECORD;
-DROP TABLE IF EXISTS QUANTITY_DETAIL_OBIS;
+DROP TABLE IF EXISTS RECORDS;
+DROP TABLE IF EXISTS dataset_quantity_joins;
 DROP TABLE IF EXISTS QUANTITY_DETAIL;
 DROP TABLE IF EXISTS MEASUREMENT_HEADER;
 DROP TABLE IF EXISTS MEASUREMENT;
 DROP TABLE IF EXISTS DATASET;
 
-CREATE TABLE IF NOT EXISTS DATASET (
+CREATE TABLE IF NOT EXISTS dataset (
     id bigint PRIMARY KEY,
     version int NOT NULL,
     name varchar(255) NOT NULL,
     reference_device_id bigint,
-    device_id bigint,
+    device_id varchar(32),
     quantity_type_name varchar(127) NOT NULL,
-    implemented_table_id bigint
+    frequency_in_seconds integer
 );
 
-CREATE TABLE IF NOT EXISTS QUANTITY_DETAIL (
+CREATE SEQUENCE IF NOT EXISTS dataset_seq;
+
+CREATE TABLE IF NOT EXISTS quantity_detail (
     id bigint PRIMARY KEY,
-    name varchar(255),
+    quantity_name varchar(255),
     unit varchar(255),
-    is_obis_name boolean
+    is_obis boolean,
+
+    medium varchar(10),
+    channel varchar(10),
+    measurement_variable varchar(10),
+    measurement_type varchar(10),
+    tariff varchar(10),
+    previous_measurement varchar(10)
 );
 
-CREATE TABLE IF NOT EXISTS QUANTITY_DETAIL_OBIS (
-    id bigint PRIMARY KEY,
-    A_value varchar(10),
-    B_value varchar(10),
-    C_value varchar(10),
-    D_value varchar(10),
-    E_value varchar(10),
-    F_value varchar(10)
+CREATE SEQUENCE IF NOT EXISTS quantity_detail_seq;
+
+CREATE TABLE IF NOT EXISTS dataset_quantity_joins (
+    device_data_set bigint NOT NULL references DATASET (id) ,
+    quantity_detail bigint NOT NULL references QUANTITY_DETAIL (id),
+    UNIQUE (device_data_set, quantity_detail)
 );
 
-CREATE TABLE IF NOT EXISTS DATASET_QUANTITY_JOINS (
-    dataset_id bigint references DATASET (id),
-    quantity_detail_id bigint references QUANTITY_DETAIL (id)
-);
-
-CREATE TABLE IF NOT EXISTS IMPLEMENTED_TABLE (
+CREATE TABLE IF NOT EXISTS implemented_table (
     id bigint PRIMARY KEY,
     table_name varchar(255),
     class_name varchar(255),
@@ -48,38 +50,37 @@ CREATE TABLE IF NOT EXISTS IMPLEMENTED_TABLE (
     dataset_id bigint NOT NULL references DATASET (id)
 );
 
-CREATE TABLE IF NOT EXISTS MEASUREMENT (
+CREATE SEQUENCE IF NOT EXISTS implemented_table_seq;
+
+CREATE TABLE IF NOT EXISTS measurement (
     id bigint PRIMARY KEY,
     reference_device_id bigint,
-    device_id bigint,
+    device_id varchar(32),
     dataset_id bigint references DATASET (id),
-    source_filename varchar(255) NOT NULL,
+    source_filename varchar(255),
     source_file_id bigint,
-    measurement_type varchar(255) NOT NULL,
-    measurement_type_by_date varchar(255) NOT NULL,
-    date_time_from timestamp NOT NULL,
-    date_time_to timestamp NOT NULL,
-    records_type varchar(255) NOT NULL,
-    info_type varchar(255),
-    records_count int,
-    frequency_minutes int
+    measurement_type varchar(255),
+    measurement_type_by_time varchar(255) ,
+    date_time_from timestamp,
+    date_time_to timestamp ,
+    records_type varchar(255),
+    records_count integer,
+    frequency_in_minutes integer
 );
 
-CREATE TABLE IF NOT EXISTS MEASUREMENT_HEADER (
-    measurement_id bigint NOT NULL references MEASUREMENT (id),
-    key varchar(255) NOT NULL,
-    value varchar(255) NOT NULL
+
+CREATE SEQUENCE IF NOT EXISTS measurement_seq;
+
+CREATE TABLE IF NOT EXISTS measurement_header (
+    measurement_id bigint NOT NULL references measurement (id),
+    header_key varchar(255) NOT NULL,
+    header_value varchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS RECORD (
-    value double precision NOT NULL,
+CREATE TABLE IF NOT EXISTS records (
+    record_value double precision NOT NULL,
     date_time_from timestamp NOT NULL,
     date_time_to timestamp NOT NULL,
     dataset_id bigint NOT NULL references DATASET (id),
     quantity_details_id bigint NOT NULL references QUANTITY_DETAIL (id)
 );
-
-CREATE SEQUENCE IF NOT EXISTS MEASUREMENT_SEQ START 1;
-CREATE SEQUENCE IF NOT EXISTS DATASET_SEQ START 1;
-CREATE SEQUENCE IF NOT EXISTS QUANTITY_DETAIL_SEQ START 1;
-CREATE SEQUENCE IF NOT EXISTS IMPLEMENTED_TABLE_SEQ START 1;

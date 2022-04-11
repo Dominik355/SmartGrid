@@ -24,4 +24,11 @@ public class ReverseProcessFileCommand implements Message {
     public String getTopic() {
         return "unprocess_file";
     }
+
+    @Override
+    public String toString() {
+        return "ReverseProcessFileCommand{" +
+                "fileId=" + fileId +
+                '}';
+    }
 }

@@ -44,4 +44,14 @@ public class TopicsConfiguration {
         return new NewTopic("process_file_reply" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
     }
 
+    @Bean
+    public NewTopic unprocessFileTopic() {
+        return new NewTopic("unprocess_file", 1, (short) 1).configs(commonProperties);
+    }
+
+    @Bean
+    public NewTopic unprocessFileTopicDLT() {
+        return new NewTopic("unprocess_file" + DLT_SUFFIX, 1, (short) 1).configs(commonProperties);
+    }
+
 }

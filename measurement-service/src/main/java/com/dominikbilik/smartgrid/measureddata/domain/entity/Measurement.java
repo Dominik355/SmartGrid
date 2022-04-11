@@ -1,31 +1,44 @@
 package com.dominikbilik.smartgrid.measureddata.domain.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+
 import java.time.LocalDateTime;
 
-public class Measurement {
+@Table(Measurement.TABLE_NAME)
+public class Measurement implements SequenceID {
 
+    public static final String TABLE_NAME = "measurement";
+
+    @Id
     private Long id;
-    private Long referenceDeviceId; //refers to device service
+    private Long referenceDeviceId; // deviceId obtained right from device-service. So true reference
     private String deviceId; // deviceId recognizable by user -> might be same as referenceDeviceId
-    private String dataSet; // if device is storing records in predefined object(table) it can define dataSet here, otherwise record values are stored separately
-    private String dataSetId;
-    private String sourceFileName;
+    private Long datasetId;
+    private String sourceFilename;
     private Long sourceFileId; // refers to file-service
     private String measurementType; // *enum***
-    private String measurementTypeByDate; // *enum***
+    private String measurementTypeByTime; // *enum***
     private LocalDateTime dateTimeFrom;
     private LocalDateTime dateTimeTo;
     private String recordsType; // *enum***
-    private String infoType; // *enum*** Pure string, obis info
-    private int recordsCount;
-    private int frequencyInMinutes;
+    private Integer recordsCount;
+    private Integer frequencyInMinutes;
 
-    public Long getId() {
-        return id;
+    public Measurement() {}
+
+    public Measurement(String filename) {
+        this.sourceFilename = filename;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 
     public Long getReferenceDeviceId() {
@@ -44,28 +57,20 @@ public class Measurement {
         this.deviceId = deviceId;
     }
 
-    public String getDataSet() {
-        return dataSet;
+    public Long getDatasetId() {
+        return datasetId;
     }
 
-    public void setDataSet(String dataSet) {
-        this.dataSet = dataSet;
+    public void setDatasetId(Long datasetId) {
+        this.datasetId = datasetId;
     }
 
-    public String getDataSetId() {
-        return dataSetId;
+    public String getSourceFilename() {
+        return sourceFilename;
     }
 
-    public void setDataSetId(String dataSetId) {
-        this.dataSetId = dataSetId;
-    }
-
-    public String getSourceFileName() {
-        return sourceFileName;
-    }
-
-    public void setSourceFileName(String sourceFileName) {
-        this.sourceFileName = sourceFileName;
+    public void setSourceFilename(String sourceFilename) {
+        this.sourceFilename = sourceFilename;
     }
 
     public Long getSourceFileId() {
@@ -84,12 +89,12 @@ public class Measurement {
         this.measurementType = measurementType;
     }
 
-    public String getMeasurementTypeByDate() {
-        return measurementTypeByDate;
+    public String getMeasurementTypeByTime() {
+        return measurementTypeByTime;
     }
 
-    public void setMeasurementTypeByDate(String measurementTypeByDate) {
-        this.measurementTypeByDate = measurementTypeByDate;
+    public void setMeasurementTypeByTime(String measurementTypeByTime) {
+        this.measurementTypeByTime = measurementTypeByTime;
     }
 
     public LocalDateTime getDateTimeFrom() {
@@ -116,27 +121,43 @@ public class Measurement {
         this.recordsType = recordsType;
     }
 
-    public String getInfoType() {
-        return infoType;
-    }
-
-    public void setInfoType(String infoType) {
-        this.infoType = infoType;
-    }
-
-    public int getRecordsCount() {
+    public Integer getRecordsCount() {
         return recordsCount;
     }
 
-    public void setRecordsCount(int recordsCount) {
+    public void setRecordsCount(Integer recordsCount) {
         this.recordsCount = recordsCount;
     }
 
-    public int getFrequencyInMinutes() {
+    public Integer getFrequencyInMinutes() {
         return frequencyInMinutes;
     }
 
-    public void setFrequencyInMinutes(int frequencyInMinutes) {
+    public void setFrequencyInMinutes(Integer frequencyInMinutes) {
         this.frequencyInMinutes = frequencyInMinutes;
+    }
+
+    @Override
+    public String getTablename() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String toString() {
+        return "Measurement{" +
+                "id=" + id +
+                ", referenceDeviceId=" + referenceDeviceId +
+                ", deviceId='" + deviceId + '\'' +
+                ", datasetId=" + datasetId +
+                ", sourceFilename='" + sourceFilename + '\'' +
+                ", sourceFileId=" + sourceFileId +
+                ", measurementType='" + measurementType + '\'' +
+                ", measurementTypeByTime='" + measurementTypeByTime + '\'' +
+                ", dateTimeFrom=" + dateTimeFrom +
+                ", dateTimeTo=" + dateTimeTo +
+                ", recordsType='" + recordsType + '\'' +
+                ", recordsCount=" + recordsCount +
+                ", frequencyInMinutes=" + frequencyInMinutes +
+                '}';
     }
 }

@@ -78,7 +78,7 @@ public class SagaManager {
         }
 
         if (!completed) {
-            LOG.info("{} steps we executed, but error occured at last executed step", stepIterator);
+            LOG.info("{} steps we executed, but error occured at last executed step", stepIterator + 1);
             // so, not all steps executed, that means exception occured -> lets execute compensation
             executeCompensations(saga, sagaInstance, stepIterator);
         } else {
@@ -102,25 +102,31 @@ public class SagaManager {
             LOG.info("Error occured at first step, there is nothing to compensate");
             return;
         }
-        LOG.info("Compensation process for saga {} starting from step {}", saga.getSagaName(), errorStep - 1);
+        LOG.info("Compensation process for saga {} starting from step {}", saga.getSagaName(), errorStep);
         sagaInstance.setCompleted(Boolean.FALSE);
         sagaInstance.setErrorTime(LocalDateTime.now());
         sagaInstance.setErrorStep(errorStep + 1);
 
         // e.g. error step = 3, we wanna compensate steps 2 to 0
         StringBuilder unsuccessfulCompensations = new StringBuilder();
-        for (int i = errorStep - 1; i == 0; i--) {
-            LOG.info("Compensating step {} for saga {}", errorStep + 1, saga.getSagaName());
+        for (int i = errorStep - 1; i >= 0; i--) {
+            LOG.info("Compensating step {} for saga {}", i, saga.getSagaName());
 
             boolean compensationSucsessful = false;
-            try {
-                compensationSucsessful = saga.executeCompensation(i);
-            } catch (Exception ex) {
-                LOG.error("Compensating step {} unsuccessful", errorStep - 1);
+            if (saga.getSteps().get(i).getReverseAction() != null) {
+                try {
+                    compensationSucsessful = saga.executeCompensation(i);
+                } catch (Exception ex) {
+                    LOG.error("Compensating step {} unsuccessful", i);
+                    ex.printStackTrace();
+                }
+            } else {
+                LOG.info("step {} does not have compensation", i);
+                continue;
             }
 
             if (!compensationSucsessful) {
-                unsuccessfulCompensations.append(saga.getSteps().get(errorStep).getStepName() + ",");
+                unsuccessfulCompensations.append(saga.getSteps().get(i).getStepName() + ",");
             }
         }
 

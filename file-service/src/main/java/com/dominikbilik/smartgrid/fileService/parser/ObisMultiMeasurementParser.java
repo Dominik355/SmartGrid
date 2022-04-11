@@ -21,8 +21,8 @@ public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasureme
     private String headerSeparator;
 
     public ObisMultiMeasurementParser() {
-        super(OBIS, PERIODICAL);
-        this.measurement = new MultiValuesMeasurement(OBIS, PERIODICAL);
+        super(CLASSIC_OBIS, PERIODICAL);
+        this.measurement = new MultiValuesMeasurement(CLASSIC_OBIS, PERIODICAL);
     }
 
     @Override

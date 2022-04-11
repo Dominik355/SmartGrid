@@ -1,9 +1,13 @@
 package com.dominikbilik.smartgrid.measureddata.domain.entity;
 
+import org.springframework.data.relational.core.mapping.Column;
+
 public class MeasurementHeader {
 
     private long measurementId;
+    @Column("header_key")
     private String key;
+    @Column("header_value")
     private String value;
 
     public long getMeasurementId() {

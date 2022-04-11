@@ -4,61 +4,61 @@ public class ObisSingleMeasurementRecord extends SingleMeasurementRecord {
 
     static final long serialVersionUID = 333L;
 
-    private int medium;
-    private int channel;
-    private int measurementVariable;
-    private int measurementType;
-    private int tariff;
-    private int previousMeasurement;
+    private Integer medium;
+    private Integer channel;
+    private Integer measurementVariable;
+    private Integer measurementType;
+    private Integer tariff;
+    private Integer previousMeasurement;
     private String description;
 
     private ObisSingleMeasurementRecord () {}
 
-    public int getMedium() {
+    public Integer getMedium() {
         return medium;
     }
 
-    public void setMedium(int medium) {
+    public void setMedium(Integer medium) {
         this.medium = medium;
     }
 
-    public int getChannel() {
+    public Integer getChannel() {
         return channel;
     }
 
-    public void setChannel(int channel) {
+    public void setChannel(Integer channel) {
         this.channel = channel;
     }
 
-    public int getMeasurementVariable() {
+    public Integer getMeasurementVariable() {
         return measurementVariable;
     }
 
-    public void setMeasurementVariable(int measurementVariable) {
+    public void setMeasurementVariable(Integer measurementVariable) {
         this.measurementVariable = measurementVariable;
     }
 
-    public int getMeasurementType() {
+    public Integer getMeasurementType() {
         return measurementType;
     }
 
-    public void setMeasurementType(int measurementType) {
+    public void setMeasurementType(Integer measurementType) {
         this.measurementType = measurementType;
     }
 
-    public int getTariff() {
+    public Integer getTariff() {
         return tariff;
     }
 
-    public void setTariff(int tariff) {
+    public void setTariff(Integer tariff) {
         this.tariff = tariff;
     }
 
-    public int getPreviousMeasurement() {
+    public Integer getPreviousMeasurement() {
         return previousMeasurement;
     }
 
-    public void setPreviousMeasurement(int previousMeasurement) {
+    public void setPreviousMeasurement(Integer previousMeasurement) {
         this.previousMeasurement = previousMeasurement;
     }
 
@@ -79,32 +79,32 @@ public class ObisSingleMeasurementRecord extends SingleMeasurementRecord {
             super(obj);
         }
 
-        public Builder withMedium(int medium) {
+        public Builder withMedium(Integer medium) {
             this.record.setMedium(medium);
             return this;
         }
 
-        public Builder withChannel(int channel) {
+        public Builder withChannel(Integer channel) {
             this.record.setChannel(channel);
             return this;
         }
 
-        public Builder withMeasurementVariable(int measurementVariable) {
+        public Builder withMeasurementVariable(Integer measurementVariable) {
             this.record.setMeasurementVariable(measurementVariable);
             return this;
         }
 
-        public Builder withMeasurementType(int measurementType) {
+        public Builder withMeasurementType(Integer measurementType) {
             this.record.setMeasurementType(measurementType);
             return this;
         }
 
-        public Builder withTariff(int tariff) {
+        public Builder withTariff(Integer tariff) {
             this.record.setTariff(tariff);
             return this;
         }
 
-        public Builder withPreviousMeasurement(int previousMeasurement) {
+        public Builder withPreviousMeasurement(Integer previousMeasurement) {
             this.record.setPreviousMeasurement(previousMeasurement);
             return this;
         }

@@ -9,7 +9,7 @@ import com.dominikbilik.smartgrid.fileService.parser.ObisMultiMeasurementParser;
 import com.dominikbilik.smartgrid.fileService.parser.ObisSingleMeasurementParser;
 import com.dominikbilik.smartgrid.fileService.utils.FileUtils;
 import com.dominikbilik.smartgrid.fileService.utils.common.SupplierFactory;
-import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.Measurement;
+import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MeasurementDto;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.MultiValuesMeasurement;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.SingleValuesMeasurement;
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.MeasurementType;
@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.dominikbilik.smartgrid.fileService.dto.measurements.checkers.MeasurementChecker.checkAndFillMultiValuesMeasurement;
 import static com.dominikbilik.smartgrid.fileService.dto.measurements.checkers.MeasurementChecker.checkAndFillSingleValuesMeasurement;
@@ -49,7 +48,7 @@ public class FileParserServiceImpl {
     private SupplierFactory<ObisMultiMeasurementParser> obisMultiParser = new SupplierFactory<>(() -> new ObisMultiMeasurementParser());
     private SupplierFactory<MeteoParser> meteoParser = new SupplierFactory<>(() -> new MeteoParser());
 
-    public Measurement parseFile(File file) {
+    public MeasurementDto parseFile(File file) {
         LOG.info("Parsing service method parseFile(File) called for file : {}", file);
 
         List<String> fileLines;
@@ -64,7 +63,7 @@ public class FileParserServiceImpl {
         return parseFile(fileLines, file.getName(), file.getFileType());
     }
 
-    public Measurement parseFile(MultipartFile file, String fileName, String fileType) {
+    public MeasurementDto parseFile(MultipartFile file, String fileName, String fileType) {
         LOG.info("Parsing service method parseFile(MultipartFile) called for : filename={}, filetype={}", (fileName != null ? fileName : file.getOriginalFilename()), fileType);
         if (fileName != null && !file.getOriginalFilename().equals(fileName)) {
             throw new IllegalArgumentException("Provided filename [{" + fileName + "}] does not match name of provided file [{" + file.getOriginalFilename() + "}]");
@@ -85,7 +84,7 @@ public class FileParserServiceImpl {
         return parseFile(fileLines, fileName, fileType);
     }
 
-    public Measurement parseFile(List<String> fileLines, String fileName, String fileType) {
+    public MeasurementDto parseFile(List<String> fileLines, String fileName, String fileType) {
         LOG.info("Parsing service method parseFile(fileLines) called for : filename={}, filetype={}", fileName, fileType);
         Assert.isTrue(CollectionUtils.isNotEmpty(fileLines), "Lines can not be empty !!!");
 
@@ -134,18 +133,18 @@ public class FileParserServiceImpl {
     // this part is here to substitute for file saving. Instead of saving file andgetting parsed object for request
     // we parse it first, time and store in map until someone calls for that
     // key -> "fileId" , value - parsed file into measurement
-    private ConcurrentMap<Long, Measurement> measurementMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<Long, MeasurementDto> measurementMap = new ConcurrentHashMap<>();
 
     // just to make sure, we wont leak memory, cause some object cna be few MB big
-    public void addMeasurementToMap(Long fileId, Measurement measurement) {
+    public void addMeasurementToMap(Long fileId, MeasurementDto measurementDto) {
         if (measurementMap.size() > 20) {
             measurementMap.clear();
         }
-        measurementMap.put(fileId, measurement);
+        measurementMap.put(fileId, measurementDto);
         LOG.info("measurementMap current state : " + measurementMap);
     }
 
-    public Measurement getMeasurementByFileId(long fileId) {
+    public MeasurementDto getMeasurementByFileId(long fileId) {
         LOG.info("returning measurement object for fileId {}", fileId);
         return measurementMap.remove(fileId);
     }
@@ -158,14 +157,15 @@ public class FileParserServiceImpl {
             throw new RuntimeException("File {} not found" + fileName);
         }
 
-        Measurement measurement = parseFile(file);
-        addMeasurementToMap(file.getId(), measurement);
+        MeasurementDto measurementDto = parseFile(file);
+        addMeasurementToMap(file.getId(), measurementDto);
 
         return new ProcessFileCommandResponse(
-                measurement.getSourceFileName(),
+                measurementDto.getSourceFileName(),
                 file.getId(),
-                measurement.getDeviceId(),
-                measurement.getDeviceName()
+                measurementDto.getDeviceId(),
+                measurementDto.getDeviceName(),
+                measurementDto.getMeasurementType().name()
         );
     }
 

@@ -8,14 +8,16 @@ public class ProcessFileCommandResponse implements MessageReply {
     private Long fileId;
     private String deviceIdFromFile;
     private String deviceNameFromFile;
+    private String measurementType;
 
     public ProcessFileCommandResponse() {}
 
-    public ProcessFileCommandResponse(String fileName, Long fileId, String deviceIdFromFile, String deviceNameFromFile) {
+    public ProcessFileCommandResponse(String fileName, Long fileId, String deviceIdFromFile, String deviceNameFromFile, String measurementType) {
         this.fileName = fileName;
         this.fileId = fileId;
         this.deviceIdFromFile = deviceIdFromFile;
         this.deviceNameFromFile = deviceNameFromFile;
+        this.measurementType = measurementType;
     }
 
     public String getFileName() {
@@ -48,6 +50,14 @@ public class ProcessFileCommandResponse implements MessageReply {
 
     public void setDeviceNameFromFile(String deviceNameFromFile) {
         this.deviceNameFromFile = deviceNameFromFile;
+    }
+
+    public String getMeasurementType() {
+        return measurementType;
+    }
+
+    public void setMeasurementType(String measurementType) {
+        this.measurementType = measurementType;
     }
 
     @Override

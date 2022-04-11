@@ -5,9 +5,10 @@ import com.dominikbilik.smartgrid.measureddata.api.v1.dto.measurements.enums.Mea
 import com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class MultiValuesMeasurement<T extends MultiMeasurementRecord> extends Measurement {
+public class MultiValuesMeasurement<T extends MultiMeasurementRecord> extends MeasurementDto {
 
     static final long serialVersionUID = 111L;
 
@@ -20,6 +21,8 @@ public class MultiValuesMeasurement<T extends MultiMeasurementRecord> extends Me
     public MultiValuesMeasurement(MeasurementType measurementType, MeasurementTypeByTime measurementTypeByTime) {
         super(measurementType, measurementTypeByTime);
     }
+
+    public MultiValuesMeasurement() {}
 
     public String[] getQuantityNames() {
         return quantityNames;
@@ -66,5 +69,16 @@ public class MultiValuesMeasurement<T extends MultiMeasurementRecord> extends Me
 
     public void setMeasurementsCount(int measurementsCount) {
         this.measurementsCount = measurementsCount;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", MultiValuesMeasurement{" +
+                "quantityNames=" + Arrays.toString(quantityNames) +
+                ", quantityUnits=" + Arrays.toString(quantityUnits) +
+                ", recordsSize=" + records.size() +
+                ", frequencyInMinutes=" + frequencyInMinutes +
+                ", measurementsCount=" + measurementsCount +
+                '}';
     }
 }

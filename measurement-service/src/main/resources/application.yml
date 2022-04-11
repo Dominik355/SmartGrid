@@ -33,6 +33,10 @@ logging:
   level:
     org:
       springframework:
-        data: DEBUG
+        data: debug
         jdbc:
-          core: TRACE
+          core: debug
+    com:
+      netflix:
+        eureka: off
+        discovery: off

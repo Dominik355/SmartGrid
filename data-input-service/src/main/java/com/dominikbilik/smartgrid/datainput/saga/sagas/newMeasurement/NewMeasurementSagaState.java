@@ -31,6 +31,7 @@ public class NewMeasurementSagaState {
     private Long fileId;
     private Long deviceId;
     private Long measurementId;
+    private String measurementType;
     private boolean deviceVerified;
 
     public NewMeasurementSagaState(String sagaId) {
@@ -54,6 +55,7 @@ public class NewMeasurementSagaState {
         setFileDeviceName(response.getDeviceNameFromFile());
         setFileName(response.getFileName());
         setFileId(response.getFileId());
+        setMeasurementType(response.getMeasurementType());
         infoLog("NewMeasurementSagaState updated based on ProcessFileCommandResponse: " + this);
     }
 
@@ -105,7 +107,7 @@ public class NewMeasurementSagaState {
     public MessageSupplier<ProcessMeasurementCommand> createProcessMeasurementCommand() {
         infoLog("Creating MessageSupplier<ProcessMeasurementCommand> for fileId {}, deviceId {} and sagaId as key {}", this.fileId, this.deviceId, this.sagaId);
         return new MessageSupplierBuilder<ProcessMeasurementCommand>()
-                .withMessage(new ProcessMeasurementCommand(this.fileId, this.deviceId))
+                .withMessage(new ProcessMeasurementCommand(this.fileId, this.deviceId, this.measurementType))
                 .withKey(this.sagaId)
                 .build();
     }
@@ -168,6 +170,14 @@ public class NewMeasurementSagaState {
 
     public void setMeasurementId(Long measurementId) {
         this.measurementId = measurementId;
+    }
+
+    public String getMeasurementType() {
+        return measurementType;
+    }
+
+    public void setMeasurementType(String measurementType) {
+        this.measurementType = measurementType;
     }
 
     @Override
