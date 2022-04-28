@@ -1,5 +1,8 @@
 package com.dominikbilik.smartgrid.measureddata.domain.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.data.relational.core.mapping.Column;
 
 import java.time.LocalDateTime;
@@ -65,4 +68,30 @@ public class Record {
         this.quantityDetailsId = quantityDetailsId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Record)) return false;
+
+        Record record = (Record) o;
+
+        return new EqualsBuilder().append(getValue(), record.getValue()).append(getDateTimeFrom(), record.getDateTimeFrom()).append(getDateTimeTo(), record.getDateTimeTo()).append(getDatasetId(), record.getDatasetId()).append(getQuantityDetailsId(), record.getQuantityDetailsId()).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(getValue()).append(getDateTimeFrom()).append(getDateTimeTo()).append(getDatasetId()).append(getQuantityDetailsId()).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("value", value)
+                .append("dateTimeFrom", dateTimeFrom)
+                .append("dateTimeTo", dateTimeTo)
+                .append("datasetId", datasetId)
+                .append("quantityDetailsId", quantityDetailsId)
+                .toString();
+    }
 }

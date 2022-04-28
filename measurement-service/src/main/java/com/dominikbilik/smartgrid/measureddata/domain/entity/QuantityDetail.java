@@ -50,6 +50,19 @@ public class QuantityDetail implements SequenceID {
         this.previousMeasurement = previousMeasurement;
     }
 
+    public QuantityDetail(Long id, String name, String unit, boolean isObis, String medium, String channel, String measurementVariable, String measurementType, String tariff, String previousMeasurement) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.isObis = isObis;
+        this.medium = medium;
+        this.channel = channel;
+        this.measurementVariable = measurementVariable;
+        this.measurementType = measurementType;
+        this.tariff = tariff;
+        this.previousMeasurement = previousMeasurement;
+    }
+
     @Override
     public Long getId() {
         return id;

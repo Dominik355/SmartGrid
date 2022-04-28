@@ -14,4 +14,8 @@ public final class StringUtils {
         return sb.toString();
     }
 
+    public static String valueOf(Object obj) {
+        return (obj == null) ? null : obj.toString();
+    }
+
 }

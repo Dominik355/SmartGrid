@@ -13,7 +13,7 @@ spring:
     open-in-view: false #https://stackoverflow.com/questions/30549489/what-is-this-spring-jpa-open-in-view-true-property-in-spring-boot
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
 
   kafka:
     bootstrap:

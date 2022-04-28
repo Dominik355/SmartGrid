@@ -17,21 +17,22 @@ import com.dominikbilik.smartgrid.measureddata.domain.repository.RecordRepositor
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
+import static com.dominikbilik.smartgrid.measureddata.internal.StringUtils.valueOf;
 
 @Service
 public class ProcessingService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessingService.class);
+
+    private static final long RECORD_TOLERANCE_MINUTES = 2;
 
     private FileServiceProxy fileServiceProxy;
     private MeasurementRepository measurementRepository;
@@ -110,18 +111,17 @@ public class ProcessingService {
     private QuantityDetail findQuantityDetail(ObisSingleMeasurementRecord record, List<QuantityDetail> details) {
         for (QuantityDetail detail : details) {
             if (detail.getUnit().equals(record.getUnit())
-                    && detail.getMedium().equals(String.valueOf(record.getMedium()))
-                    && detail.getChannel().equals(String.valueOf(record.getChannel()))
-                    && detail.getMeasurementVariable().equals(String.valueOf(record.getMeasurementVariable()))
-                    && detail.getMeasurementType().equals(String.valueOf(record.getMeasurementType()))
-                    && detail.getTariff().equals(String.valueOf(record.getTariff()))
-                    && detail.getPreviousMeasurement().equals(String.valueOf(record.getPreviousMeasurement()))) {
+                    && detail.getMedium() != null ? detail.getMedium().equals(valueOf(record.getMedium())) : true
+                    && detail.getChannel() != null ? detail.getChannel().equals(valueOf(record.getChannel())) : true
+                    && detail.getMeasurementVariable() != null ? detail.getMeasurementVariable().equals(valueOf(record.getMeasurementVariable())) : true
+                    && detail.getMeasurementType() != null ? detail.getMeasurementType().equals(valueOf(record.getMeasurementType())) : true
+                    && detail.getTariff() != null ? detail.getTariff().equals(valueOf(record.getTariff())) : true
+                    && detail.getPreviousMeasurement() != null ? detail.getPreviousMeasurement().equals(valueOf(record.getPreviousMeasurement())) : true) {
                 LOG.info("Found detail {} for record {}", detail, record);
                 details.remove(detail);
                 return detail;
             }
         }
-        LOG.info("QuantityDetail not found for record {}", record);
         return null;
     }
 
@@ -174,7 +174,7 @@ public class ProcessingService {
             ObisSingleMeasurementRecord processedRecord = records.get(i);
             QuantityDetail quantityDetail = findQuantityDetail(processedRecord, quantityDetails);
 
-            if(quantityDetail == null && processedRecord.getPreviousMeasurement() != null) {
+            if(quantityDetail == null) {
                 LOG.info("QuantityDetail not found for record: {}", processedRecord);
                 continue;
             }
@@ -203,12 +203,14 @@ public class ProcessingService {
             records.remove(records.size() - 1);
         }
 
+        Collections.sort(records, Comparator.comparing(com.dominikbilik.smartgrid.measureddata.api.v1.dto.records.MultiMeasurementRecord::getDateTime));
+
         Instant startOverall = Instant.now();
         for (int col = 0; col < columnNum; col++) {
             LOG.info("Going over column {} out of {}", col, columnNum - 1);
             QuantityDetail actualQD = quantityDetails.get(col);
             Instant start = Instant.now();
-            /*
+/*          ONE BY ONE
             for (int row = 0; row < records.size(); row++) {
                 count += recordRepository.save(new Record(records.get(row).getValues()[col],
                         records.get(row).getDateTime(),
@@ -219,6 +221,78 @@ public class ProcessingService {
             }
             */
             List<Record> recordsToInsert = new ArrayList<>();
+            Record record = null;
+
+            // find last record before this measurement. First record is oldest, so find first up to that date
+            Record lastRecord = recordRepository.getLastRecordToDefinedTime(datasetId,  actualQD.getId(), records.get(0).getDateTime());
+            if (lastRecord == null) {
+                LOG.info("the previous record was not found [datasetId={}, quantityId={}, time={}]", datasetId,  actualQD.getId(), records.get(0).getDateTime());
+            } else if (lastRecord.getDateTimeTo().plusMinutes(RECORD_TOLERANCE_MINUTES).isBefore(records.get(0).getDateTime())) {
+                LOG.info("Last found record is not new enought to be connected with first record of measurement [lastRecord timeTo={}, new record time from={}]", lastRecord.getDateTimeTo(), (records.get(0).getDateTime()));
+            } else {
+                LOG.info("Candidate record for join found [lastRecord timeTo={}, new record time from={}]", lastRecord.getDateTimeTo(), (records.get(0).getDateTime()));
+                if (!records.get(0).getValues()[col].equals(lastRecord.getValue())) {
+                    LOG.info("Hodnoty sa nezhoduju, mozeme ist dalej");
+                } else {
+                    LOG.info("Nasli sme zhodu v case aj hodnotach, hodnota = {}. Nastavime record", lastRecord.getValue());
+                    record = lastRecord;
+                }
+            }
+
+            int row = 0;
+            if (record != null) {
+                LOG.info("record nieje null, tak ideme najst, pokial ide aj snura rovnakych hodnot");
+                // pokial record nieje null, tak hladame dokedy je zhoda, a potom record nie insertneme ale updatneme, nasledne sa pojdu robit klasicke inserty
+                for (; row < records.size(); row++) {
+                    Double actualValue = records.get(row).getValues()[col];
+                    if (record.getValue().equals(actualValue)) {
+                        LOG.info("nasli sme zhodu v hodnote {}, pre riadok {}", actualValue, row);
+                        record.setDateTimeTo(records.get(row).getDateTime());
+                    } else {
+                        LOG.info("Snura rovnakych hodnot sa ukoncila na riadku {}, updatneme povodny record {} s novym casom DO {}, nastavime record na null", lastRecord, record.getDateTimeTo(), row);
+                        recordRepository.updateDateTimeTo(lastRecord, record.getDateTimeTo());
+                        record = null;
+                        break;
+                    }
+                }
+            }
+
+
+            for (; row < records.size(); row++) {
+                LOG.info("pokracujeme na riadku {}", row);
+                Double actualValue = records.get(row).getValues()[col];
+
+                if (record == null) {
+                    LOG.info("Record je null, vytvorili sme novy pre row {}", row);
+                    record = new Record(actualValue,
+                            records.get(row).getDateTime(),
+                            records.get(row).getDateTime(),
+                            datasetId,
+                            actualQD.getId());
+                    continue;
+                } else {
+                    if (record.getValue().equals(actualValue)) {
+                        LOG.info("Snura rovnakych hodnot pokracuje pre hodnotu {}, sme na riadku {}", actualValue, row);
+                        record.setDateTimeTo(records.get(row).getDateTime());
+                    } else {
+                        LOG.info("Record nieje null, no hodnota uz sa nezhoduje[aktualna={}], preto ulozime co mame a nastavime novy record", actualValue);
+                        recordsToInsert.add(record);
+
+                        record = new Record(actualValue,
+                                records.get(row).getDateTime(),
+                                records.get(row).getDateTime(),
+                                datasetId,
+                                actualQD.getId());
+                    }
+                }
+
+            }
+
+            if (record != null) {
+                LOG.info("For cyklus sa ukoncil, ulozime {}", record);
+                recordsToInsert.add(record);
+            }
+/*
             for (int row = 0; row < records.size(); row++) {
                 recordsToInsert.add(new Record(records.get(row).getValues()[col],
                         records.get(row).getDateTime(),
@@ -227,9 +301,10 @@ public class ProcessingService {
                         actualQD.getId())
                 );
             }
-
+*/
             int[] saved = recordRepository.batchInsert(recordsToInsert);
             count += saved.length;
+
             Instant end = Instant.now();
             LOG.info("count {}. Column {} out of {} stored in: {}", count, col, columnNum - 1, Duration.between(start, end));
         }

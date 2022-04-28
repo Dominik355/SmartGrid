@@ -87,8 +87,8 @@ public class ObisMultiMeasurementParser extends AbstractAblParser<MultiMeasureme
                 this.measurement.addRecord(new MultiMeasurementRecord.Builder<>()
                         .withValues(values)
                         .withDateTime(measurement.getDateTimeFromHeader().orElseThrow(
-                                        () -> new SmartGridParsingException("Missing DateTime in Measurement, can not define record datetime")
-                                ).minusMinutes(realOrder * measurement.getFrequencyInMinutes()))
+                                        () -> new SmartGridParsingException("Missing DateTime in Measurement, can not define record datetime"))
+                                .minusMinutes(realOrder * measurement.getFrequencyInMinutes()))
                         .build());
                 realOrder++;
             } catch (Exception e) {

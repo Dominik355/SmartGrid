@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,16 +49,7 @@ public class RecordSearchService {
         }
 
         for (Quantity searchQuantity : request.getQuantities()) {
-            QuantityDetail quantityDetail = quantityDetailRepository.findAllBySearchCriteria(
-                    searchQuantity.getName(),
-                    searchQuantity.getMedium(),
-                    searchQuantity.getChannel(),
-                    searchQuantity.getMeasurementVariable(),
-                    searchQuantity.getMeasurementType(),
-                    searchQuantity.getTariff(),
-                    searchQuantity.getPreviousMeasurement()
-            );
-/*
+            QuantityDetail quantityDetail;
             List<QuantityDetail> details = new ArrayList<>();
             quantityDetailRepository.findAllBySearchCriteria(
                     searchQuantity.getName(),
@@ -81,18 +71,19 @@ public class RecordSearchService {
                 quantityDetail = details.get(0);
                 LOG.info("Found QuantityDetail: {}", quantityDetail);
             }
-*/
+
             LOG.info("Found QuantityDetail: {}", quantityDetail);
             DeviceDataSet usingDataset = findDatasetForQuantity(datasets, quantityDetail);
             if (usingDataset == null) {
                 foundRecords.add(new FoundRecords("None of found datasets contains quantityDetail " + quantityDetail));
                 continue;
             }
+            LOG.info("Found dataset {}", usingDataset);
 
             Instant start = Instant.now();
             List<Record> records = recordRepository.getRecords(request.getFrom(), request.getTo(), usingDataset.getId(), quantityDetail.getId());
             Instant end = Instant.now();
-            LOG.info("Found {} records [from={}, to={}] in ", records.size(), request.getFrom(), request.getTo(), Duration.between(start, end));
+            LOG.info("Found {} records [from={}, to={}] in {}", records.size(), request.getFrom(), request.getTo(), Duration.between(start, end));
 
             if (CollectionUtils.isEmpty(records)) {
                 foundRecords.add(new FoundRecords("No records found for [" + quantityDetail + "] in time between " + request.getFrom() + " and " + request.getTo()));
@@ -102,7 +93,7 @@ public class RecordSearchService {
             foundRecords.add(new FoundRecords(
                     searchQuantity,
                     records.stream()
-                            .map(record -> new SearchRecord(record.getDateTimeFrom(), record.getValue()))
+                            .map(record -> new SearchRecord(record.getDateTimeFrom(), record.getDateTimeTo(), record.getValue()))
                             .collect(Collectors.toList())));
         }
 
@@ -129,7 +120,7 @@ public class RecordSearchService {
 
                 }
             }
-            divided.add(new SearchRecord(record.getDateTimeFrom(), record.getValue()));
+            divided.add(new SearchRecord(record.getDateTimeFrom(), record.getDateTimeTo(), record.getValue()));
         }
 
         return divided;

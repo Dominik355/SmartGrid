@@ -20,6 +20,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.dominikbilik.smartgrid.measureddata.internal.StringUtils.valueOf;
+
 @Service
 public class DataSetService {
 
@@ -75,13 +77,7 @@ public class DataSetService {
         if (measurementDto.getMeasurementType().name().toUpperCase().contains("OBIS")) {
             for (Map.Entry<String, String> entry : nameUnitMap.entrySet()) {
                 String[] tuple = entry.getKey().split("\\.");
-                LOG.info("Pre multi= unit={}, medium={}, channel={}, variable={}, type={}, tariff={}, previous={}", entry.getValue(),
-                        null,
-                        null,
-                        tuple[0],
-                        tuple[1],
-                        null,
-                        null);
+
                 QuantityDetail detail = quantityDetailRepository.findByObisCode(
                         entry.getValue(),
                         null,
@@ -96,7 +92,7 @@ public class DataSetService {
                     detail = quantityDetailRepository.save(new QuantityDetail(entry.getValue(), tuple[0], tuple[1]));
                     newQuantityDetailFound = true;
                 } else {
-                    LOG.info("Quantity detail FOUND based on [name={}, unit={}]", entry.getKey(), entry.getValue());
+                    LOG.info("Quantity detail FOUND based on [name={}, unit={}], id={}", entry.getKey(), entry.getValue(), detail.getId());
                 }
 
                 quantityDetails.add(detail);
@@ -110,7 +106,7 @@ public class DataSetService {
                     quantityDetail = quantityDetailRepository.save(new QuantityDetail(entry.getKey(), entry.getValue(), false));
                     newQuantityDetailFound = true;
                 } else {
-                    LOG.info("Quantity detail FOUND based on [name={}, unit={}]", entry.getKey(), entry.getValue());
+                    LOG.info("Quantity detail FOUND based on [name={}, unit={}], id={}", entry.getKey(), entry.getValue(), quantityDetail.getId());
                 }
 
                 quantityDetails.add(quantityDetail);
@@ -162,7 +158,8 @@ public class DataSetService {
                 measurementDto.getDeviceId(),
                 measurementDto.getDeviceName(),
                 measurementDto.getMeasurementType().name(),
-                quantityDetails));
+                quantityDetails,
+                (measurementDto instanceof MultiValuesMeasurement) ? ((MultiValuesMeasurement) measurementDto).getFrequencyInMinutes()/60 : 0));
         LOG.info("New dataset created: {}", dataset);
 
         return dataset;
@@ -193,20 +190,20 @@ public class DataSetService {
         boolean newQuantityDetailFound = true;
         for (ObisSingleMeasurementRecord record : measurementDto.getRecords()) {
             LOG.info("Pre Single: unit={}, medium={}, channel={}, variable={}, type={}, tariff={}, previous={}", record.getUnit(),
-                    String.valueOf(record.getMedium()),
-                    String.valueOf(record.getChannel()),
-                    String.valueOf(record.getMeasurementVariable()),
-                    String.valueOf(record.getMeasurementType()),
-                    String.valueOf(record.getTariff()),
-                    String.valueOf(record.getPreviousMeasurement()));
+                    record.getMedium(),
+                    valueOf(record.getChannel()),
+                    valueOf(record.getMeasurementVariable()),
+                    valueOf(record.getMeasurementType()),
+                    valueOf(record.getTariff()),
+                    valueOf(record.getPreviousMeasurement()));
             QuantityDetail detail = quantityDetailRepository.findByObisCode(
                     record.getUnit(),
-                    String.valueOf(record.getMedium()),
-                    String.valueOf(record.getChannel()),
-                    String.valueOf(record.getMeasurementVariable()),
-                    String.valueOf(record.getMeasurementType()),
-                    String.valueOf(record.getTariff()),
-                    String.valueOf(record.getPreviousMeasurement())
+                    valueOf(record.getMedium()),
+                    valueOf(record.getChannel()),
+                    valueOf(record.getMeasurementVariable()),
+                    valueOf(record.getMeasurementType()),
+                    valueOf(record.getTariff()),
+                    valueOf(record.getPreviousMeasurement())
             );
             // quantity was not found , so lets create new -> need to save both normal and obis (obis with same ID)
             if (detail == null) {
@@ -214,16 +211,16 @@ public class DataSetService {
                 detail = quantityDetailRepository.save(new QuantityDetail(
                         record.getUnit(),
                         true,
-                        String.valueOf(record.getMedium()),
-                        String.valueOf(record.getChannel()),
-                        String.valueOf(record.getMeasurementVariable()),
-                        String.valueOf(record.getMeasurementType()),
-                        String.valueOf(record.getTariff()),
-                        String.valueOf(record.getPreviousMeasurement())
+                        valueOf(record.getMedium()),
+                        valueOf(record.getChannel()),
+                        valueOf(record.getMeasurementVariable()),
+                        valueOf(record.getMeasurementType()),
+                        valueOf(record.getTariff()),
+                        valueOf(record.getPreviousMeasurement())
                 ));
                 newQuantityDetailFound = false;
             } else {
-                LOG.info("Quantity detail FOUND based on record {}", record);
+                LOG.info("Quantity detail FOUND based on record {}, quantityDetailId={}", record, detail.getId());
             }
             quantityDetails.add(detail);
         }

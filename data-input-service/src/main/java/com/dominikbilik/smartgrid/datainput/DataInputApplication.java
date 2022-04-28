@@ -19,13 +19,5 @@ public class DataInputApplication {
 
     @Autowired
     private NewMeasurementHandler handler;
-/*
-    @Bean
-    public CommandLineRunner runner() {
-        return args -> {
-            NewMeasurementSaga saga = new NewMeasurementSaga(handler);
-            saga.start();
-        };
-    }
-*/
+
 }

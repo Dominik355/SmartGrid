@@ -46,12 +46,13 @@ public class DeviceDataSet implements SequenceID {
 
     public DeviceDataSet() {}
 
-    public DeviceDataSet(Long referenceDeviceId, String deviceId, String dataSetName, String quantityTypeName, Iterable<QuantityDetail> quantityDetails) {
+    public DeviceDataSet(Long referenceDeviceId, String deviceId, String dataSetName, String quantityTypeName, Iterable<QuantityDetail> quantityDetails, int frequencyInSeconds) {
         this.version = 0;
         this.referenceDeviceId = referenceDeviceId;
         this.deviceId = deviceId;
         this.dataSetName = dataSetName;
         this.quantityTypeName = quantityTypeName;
+        this.frequencyInSeconds = frequencyInSeconds;
         this.addQuantityDetails(quantityDetails);
     }
 
